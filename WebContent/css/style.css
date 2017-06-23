@@ -1,0 +1,106 @@
+.work_detail{
+	display: none;
+}
+#period_end, #period_start{
+	width: 100px;
+}
+#skills{
+	width: 80%;
+}
+#zipcode{
+	width: 6%;
+}
+#address{
+	width: 40%;
+}
+#address_detail{
+	width:40%;
+}
+#periedDate{
+	width: 50px;
+}
+.input_box{
+	border-top:1px solid #e4e4e4;
+}
+.input_box > .row{
+	margin-top: 20px;
+}
+.input_box > .row > *{
+	margin-right: 20px;
+}
+.buttonBox{
+	float: right;
+}
+.buttonBox > * {
+	float: right;
+}
+.form-inline{
+	width: 100%;
+}
+.form-inline > label{
+	margin-left: 10px;
+}
+body{
+	background-color: #E4E4E4;
+}
+.navbar{
+	background-color: #E4E4E4;
+	border: none;
+}
+.navbar > ul > li{
+	background-color: #E4E4E4;
+}
+.w3-sidebar {
+	position: relative;
+	width: 5%;
+}
+
+.w3-sidebar > * {
+	display: block;
+	color: #A4A4A4;
+	margin-top: 10px;
+}
+a {
+	color: #A4A4A4;
+}
+
+a:HOVER {
+	color: #333333;
+	text-decoration: none;
+}
+a:FOCUS{
+	text-decoration: none;
+	color: #333333;
+}
+.pagination > li>a{
+	color: #E4E4E4;
+}
+.pagination > li>a:hover{
+	color: #A4A4A4;
+}
+.pagination > li.active>a{
+	background-color:#A4A4A4;
+	border-color:#A4A4A4;
+	color: #E4E4E4;
+}
+.container {
+	margin-left: 5%;
+	width:94%;
+	height: 100%;
+}
+
+.borderBox {
+	margin: 5px 5px 5px 5px;
+	background-color: #F4F4F4;
+}
+.borderBox > ul{
+	display: table-cell;
+	vertical-align: middle;
+}
+.pageLeft {
+	float: left;
+}
+
+.pageRight {
+	float: right;
+}
