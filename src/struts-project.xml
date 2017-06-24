@@ -13,5 +13,15 @@
     		<interceptor-ref name="params"/>
     		<result name="success">/WEB-INF/jsp/project/create.jsp</result>
     	</action>
+    	<action name="registerDone" class="com.icanman.action.project.ProjectCreateAction">
+    		<interceptor-ref name="prepare"/>
+    		<interceptor-ref name="modelDriven"/>
+    		<interceptor-ref name="params"/>
+    		<result name="success" type="redirectAction">
+    			<param name="actionName">list</param>
+    			<param name="page">${page}</param>
+    			<param name="perPageNum">${perPageNum}</param>
+    		</result>
+    	</action>
     </package>
 </struts>

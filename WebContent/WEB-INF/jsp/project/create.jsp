@@ -52,7 +52,7 @@
   			</ul>
 			</div>
 			<div class="col-md-12 borderBox" >
-			<form action="${pageContext.request.contextPath }/project/register.do" method="post" id="frm">
+			<form action="${pageContext.request.contextPath }/project/registerDone.do" method="post" id="frm">
 				<input type="hidden" name="page" value="${cri.page }">
 				<input type="hidden" name="perPageNum" value="${cri.perPageNum }">
 				<input type="hidden" name="loc" value="${cri.location }">
@@ -78,25 +78,25 @@
 						<tr>
 							<th>Start Day</th>
 							<td>
-								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="startday" id="startday" readonly="readonly">
+								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="start" id="startday" readonly="readonly">
 							</td>
 						</tr>
 						<tr>
 							<th>End Day</th>
 							<td>
-								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="endday" id="endday" readonly="readonly">
+								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="end" id="endday" readonly="readonly">
 							</td>
 						</tr>
 						<tr>
 							<th>Order Company</th>
 							<td>
-								<input type="text" placeholder="Please Write Date" class="form-control" name="ordercompany">
+								<input type="text" placeholder="Please Write Date" class="form-control" name="order_company">
 							</td>
 						</tr>
 						<tr>
 							<th>Create Skill</th>
 							<td>
-								<input type="text" placeholder="Please Write Date" class="form-control" name="createskill" id="createskill">
+								<input type="text" placeholder="Please Write Date" class="form-control" name="create_skill" id="createskill">
 							</td>
 						</tr>
 						<tr>
@@ -109,9 +109,9 @@
 					<tfoot>
 						<tr>
 							<td colspan="2" align="right">
-								<input type="button" class="btn btn-default" value="Submit" onclick="submit()">
 								<input type="reset" class="btn btn-default" value="Reset">
 								<input type="button" class="btn btn-default" value="Cancel">
+								<input type="button" class="btn btn-default" value="Submit" onclick="submit()">
 							</td>
 						</tr>
 					</tfoot>

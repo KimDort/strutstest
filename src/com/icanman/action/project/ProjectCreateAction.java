@@ -1,37 +1,36 @@
 package com.icanman.action.project;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.icanman.model.Project;
 import com.icanman.service.project.ProjectService;
 import com.icanman.tools.SearchCriteria;
 import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ModelDriven;
+import com.opensymphony.xwork2.Preparable;
 
-public class ProjectListAction implements Action{
+public class ProjectCreateAction implements Action, Preparable, ModelDriven<Project>{
 	private SearchCriteria cri;
 	private int page;
 	private int perPageNum;
-	private List<Project> list;
+	private Project project;
 	
 	@Override
 	public String execute() throws Exception {
-		ProjectService projectService = new ProjectService();
 		cri=new SearchCriteria();
 		cri.setPage(page);
 		cri.setPerPageNum(perPageNum);
-		
-		list=new ArrayList<>();
-		list=projectService.list(cri);
+		ProjectService projectService= new ProjectService();
+		projectService.register(project);
 		return "success";
 	}
-	
-	public List<Project> getList() {
-		return list;
+
+	@Override
+	public Project getModel() {
+		return project;
 	}
 
-	public void setList(List<Project> list) {
-		this.list = list;
+	@Override
+	public void prepare() throws Exception {	
+		project=new Project();
 	}
 
 	public SearchCriteria getCri() {

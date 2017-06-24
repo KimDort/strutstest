@@ -14,7 +14,7 @@ public class ProjectDAO {
 	public int register(Connection conn, Project vo){
 		int success=0;
 		PreparedStatement pstmt=null;
-		String sql="INSERT INTO PROJECT VALUES(projectseq.nextval, ?, ?, ?, ?, ?, ?, ?)";
+		String sql="INSERT INTO PROJECT VALUES(projectseq.nextval, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -25,6 +25,7 @@ public class ProjectDAO {
 			pstmt.setString(5, vo.getOrder_company());
 			pstmt.setString(6, vo.getCreate_skill());
 			pstmt.setString(7, vo.getEtc());
+			pstmt.setString(8, String.valueOf(vo.getIsdelete()));
 			success=pstmt.executeUpdate();
 		} catch (Exception e) {
 			// TODO: handle exception

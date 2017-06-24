@@ -17,7 +17,7 @@
 <link href="${pageContext.request.contextPath }/css/style.css" rel="Stylesheet" type="text/css">
 <script>
 	function createItem(){
-		$("#frm").attr("action", '${pageContext.request.contextPath }/project/registerForm.do');
+		$("#frm").attr("action", '${pageContext.request.contextPath }/project/register.do?page=${cri.page}&perPageNum=${cri.perPageNum}');
 		$("#frm").attr("method", "post");
 		$("#frm").submit();
 	}

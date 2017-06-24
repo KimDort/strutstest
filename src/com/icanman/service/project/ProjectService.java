@@ -33,7 +33,6 @@ public class ProjectService {
 		Connection conn=dbConn.getConnection();
 		ProjectDAO dao=new ProjectDAO(); 
 		try {
-			conn=dbConn.getConnection();
 			conn.setAutoCommit(false);
 			success=dao.register(conn, vo);
 			conn.commit();
