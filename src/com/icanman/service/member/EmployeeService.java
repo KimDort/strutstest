@@ -15,12 +15,9 @@ import com.icanman.tools.DBConn;
 import com.icanman.tools.SearchCriteria;
 //Employee Service Class
 public class EmployeeService{
-	
-	//DB Connection Class
-	private DBConn dbConn;
 
 	public List<Employee> list(SearchCriteria cri) throws SQLException {
-		dbConn=new DBConn();
+		DBConn dbConn=new DBConn();
 		List<Employee> list=new ArrayList<>();
 		Connection conn = dbConn.getConnection();
 		EmployeeDAO dao=new EmployeeDAO();
@@ -42,7 +39,7 @@ public class EmployeeService{
 		EmployeeDAO employeeDao = new EmployeeDAO();
 		CareerDAO careerDao = new CareerDAO();
 		LicenseDAO licenseDao = new LicenseDAO();
-		dbConn=new DBConn();
+		DBConn dbConn=new DBConn();
 		Connection conn=null;
 		int success=0;
 		try {		

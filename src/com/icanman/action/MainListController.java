@@ -1,4 +1,4 @@
-package com.icanman.controller;
+package com.icanman.action;
 
 public class MainListController {
 	

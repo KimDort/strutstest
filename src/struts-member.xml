@@ -3,18 +3,19 @@
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <package name="employee" namespace="/employee" extends="struts-default">
-    	<action name="list" class="com.icanman.controller.employee.EmployeeListAction" >
+    	<action name="list" class="com.icanman.action.employee.EmployeeListAction" >
     		<interceptor-ref name="prepare"/>
     		<interceptor-ref name="modelDriven"/>
     		<interceptor-ref name="params"/>
     		<result name="success">/WEB-INF/jsp/employee/list.jsp</result>
     	</action>    
     	
-    	<action name="register" class="com.icanman.controller.employee.EmployeeFromAction">
+    	<action name="register" class="com.icanman.action.employee.EmployeeFromAction">
+    		<interceptor-ref name="params"/>
     		<result name="success">/WEB-INF/jsp/employee/create.jsp</result>
     	</action>
     		
-    	<action name="registerDone" class="com.icanman.controller.employee.EmployeeCreateAction">
+    	<action name="registerDone" class="com.icanman.action.employee.EmployeeCreateAction">
     		<interceptor-ref name="params"/>	
     		<result name="success" type="redirectAction">
     			<param name="actionName">list</param>

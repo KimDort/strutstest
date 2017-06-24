@@ -1,4 +1,4 @@
-package com.icanman.controller.employee;
+package com.icanman.action.employee;
 
 import com.icanman.model.Career;
 import com.icanman.model.Employee;

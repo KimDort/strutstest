@@ -1,4 +1,4 @@
-package com.icanman.controller.employee;
+package com.icanman.action.employee;
 
 import com.icanman.tools.SearchCriteria;
 import com.opensymphony.xwork2.Action;

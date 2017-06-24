@@ -1,4 +1,4 @@
-package com.icanman.controller.employee;
+package com.icanman.action.employee;
 
 import java.util.ArrayList;
 import java.util.List;
