@@ -1,18 +1,20 @@
 package com.icanman.model;
 
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Employee {
 	private int no;
 	private String name;
 	private String company;
-	private String idnumber;
+	private String idnumber1;
+	private String idnumber2;
 	private String zipcode;
 	private String address;
 	private String address_detail;
 	private String rank;
-	private Date join;
-	private Date out;
+	private String join;
+	private String out;
 	private String isnew;
 	private String haveskill;
 	private String position;
@@ -36,11 +38,17 @@ public class Employee {
 	public void setCompany(String company) {
 		this.company = company;
 	}
-	public String getIdnumber() {
-		return idnumber;
+	public String getIdnumber1() {
+		return idnumber1;
 	}
-	public void setIdnumber(String idnumber) {
-		this.idnumber = idnumber;
+	public void setIdnumber1(String idnumber1) {
+		this.idnumber1 = idnumber1;
+	}
+	public String getIdnumber2() {
+		return idnumber2;
+	}
+	public void setIdnumber2(String idnumber2) {
+		this.idnumber2 = idnumber2;
 	}
 	public String getZipcode() {
 		return zipcode;
@@ -66,16 +74,16 @@ public class Employee {
 	public void setRank(String rank) {
 		this.rank = rank;
 	}
-	public Date getJoin() {
+	public String getJoin() {
 		return join;
 	}
-	public void setJoin(Date join) {
+	public void setJoin(String join) {
 		this.join = join;
 	}
-	public Date getOut() {
+	public String getOut() {
 		return out;
 	}
-	public void setOut(Date out) {
+	public void setOut(String out) {
 		this.out = out;
 	}
 	public String getIsnew() {

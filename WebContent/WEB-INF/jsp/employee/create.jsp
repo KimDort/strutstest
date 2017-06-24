@@ -71,9 +71,9 @@
 			dateFormat:'yy-mm-dd', changeMonth: true, changeYear: true, nextText: '다음 달', prevText: '이전 달'});
 		$("input[name='career.license_date']").datepicker({
 			dateFormat:'yy-mm-dd', changeMonth: true, changeYear: true, nextText: '다음 달', prevText: '이전 달'});
-		$("input[name='employee.joincompany']").datepicker({
+		$("input[name='employee.join']").datepicker({
 			dateFormat:'yy-mm-dd', changeMonth: true, changeYear: true, nextText: '다음 달', prevText: '이전 달'});
-		$("input[name='employee.outcompany']").datepicker({
+		$("input[name='employee.out']").datepicker({
 			dateFormat:'yy-mm-dd', changeMonth: true, changeYear: true, nextText: '다음 달', prevText: '이전 달'});
 	});
 	
@@ -248,13 +248,13 @@
 								Join Company Date
 							</th>
 							<td>
-								<input type="text" name="employee.joincompany" class="form-control" readonly="readonly" id="joincompany">
+								<input type="text" name="employee.join" class="form-control" readonly="readonly" id="joincompany">
 							</td>
 							<th>
 								Out Company Date
 							</th>
 							<td>
-								<input type="text" name="employee.outcompany" class="form-control" readonly="readonly" id="outcompany">
+								<input type="text" name="employee.out" class="form-control" readonly="readonly" id="outcompany">
 							</td>
 						</tr>
 						<tr>
@@ -274,7 +274,7 @@
 								Have Skills
 							</th>
 							<td colspan="3">
-								<input type="text" name="employee.haveskills" class="form-control" id="skills" placeholder="JAVA, SPRING, ...">
+								<input type="text" name="employee.haveskill" class="form-control" id="skills" placeholder="JAVA, SPRING, ...">
 							</td>
 							
 						</tr>

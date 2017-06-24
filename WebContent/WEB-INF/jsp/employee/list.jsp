@@ -209,11 +209,11 @@
 					<td>${idx.rank }</td>
 					<td>${idx.join }</td>
 					<td>
-						<c:set var="number" value="${fn:split(idx.idnumber,'-') }"/>
-						<c:if test="${number[1].substring(0,1) eq '1' or number[1].substring(0,1) eq '3'}">
+						<c:set var="number" value="${idx.idnumber2 }"/>
+						<c:if test="${number.substring(0,1) eq '1' or number.substring(0,1) eq '3'}">
 							Man
 						</c:if>
-						<c:if test="${number[1].substring(0,1) eq '2' or number[1].substring(0,1) eq '4'}">
+						<c:if test="${number.substring(0,1) eq '2' or number.substring(0,1) eq '4'}">
 							Woman
 						</c:if>
 					</td>

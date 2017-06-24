@@ -8,14 +8,19 @@ import com.opensymphony.xwork2.Action;
 
 //Employee Base Info Register Class
 public class EmployeeCreateAction implements Action{
-	// private EmployeeServiceImpl employeeService;
+	private EmployeeService employeeService;
 	private Employee employee;
 	private Career career;
 	private License license;
+	
 	@Override
 	public String execute() throws Exception {
-		
-		return "success";
+		employeeService=new EmployeeService();
+		if(employeeService.register(employee, career, license)==1){
+			return "success";
+		}else{
+			return "error";
+		}
 	}
 
 	public Employee getEmployee() {
