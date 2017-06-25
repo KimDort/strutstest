@@ -52,11 +52,11 @@
   			</ul>
 			</div>
 			<div class="col-md-12 borderBox" >
-			<form id="frm" action="${pageContext.request.contextPath }/project/modify.do" method="post">
+			<form id="frm" action="${pageContext.request.contextPath }/project/modifyDone.do" method="post">
 				<input type="hidden" name="page" value="${cri.page }">
 				<input type="hidden" name="perPageNum" value="${cri.perPageNum }">
 				<input type="hidden" name="loc" value="${cri.location }">
-				<input type="hidden" name="no" value="${read.no}">
+				<input type="hidden" name="no" value="${project.no}">
 				<table class="table table-hover" style="width: 100%;">
 					<thead>
 						<tr>
@@ -67,43 +67,43 @@
 					<tr>
 							<th width="200px">Project Name</th>
 							<td>
-								<input type="text" placeholder="Please Write Name" class="form-control" name="name" value="${read.name }">
+								<input type="text" placeholder="Please Write Name" class="form-control" name="name" value="${project.name }">
 							</td>
 						</tr>
 						<tr>
 							<th>Content</th>
 							<td>
-								<input type="text" placeholder="Please Write Content" class="form-control" name="content" value="${read.content }">
+								<input type="text" placeholder="Please Write Content" class="form-control" name="content" value="${project.content }">
 							</td>
 						</tr>
 						<tr>
 							<th>Start Day</th>
 							<td>
-								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="startday" id="startday" readonly="readonly" value="${read.start }">
+								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="start" id="startday" readonly="readonly" value="${project.start }">
 							</td>
 						</tr>
 						<tr>
 							<th>End Day</th>
 							<td>
-								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="endday" id="endday" readonly="readonly" value="${read.end }">
+								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="end" id="endday" readonly="readonly" value="${project.end }">
 							</td>
 						</tr>
 						<tr>
 							<th>Order Company</th>
 							<td>
-								<input type="text" placeholder="Please Write Date" class="form-control" name="ordercompany" value="${read.order_company }">
+								<input type="text" placeholder="Please Write Date" class="form-control" name="order_company" value="${project.order_company }">
 							</td>
 						</tr>
 						<tr>
 							<th>Create Skill</th>
 							<td>
-								<input type="text" placeholder="Please Write Date" class="form-control" name="createskill" id="createskill" value="${read.create_skill }">
+								<input type="text" placeholder="Please Write Date" class="form-control" name="create_skill" id="createskill" value="${project.create_skill }">
 							</td>
 						</tr>
 						<tr>
 							<th>ETC</th>
 							<td>
-								<input type="text" placeholder="Please Write Date" class="form-control" name="etc" value="${read.etc }">
+								<input type="text" placeholder="Please Write Date" class="form-control" name="etc" value="${project.etc }">
 							</td>
 						</tr>
 					</tbody>

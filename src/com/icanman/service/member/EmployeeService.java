@@ -28,9 +28,7 @@ public class EmployeeService{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			if(conn!=null){
-				conn.close();
-			}
+			if(conn!=null){conn.close();}
 		}
 		return list;
 	}
@@ -55,11 +53,14 @@ public class EmployeeService{
 				if(conn!=null){conn.rollback();success=0;}
 			}
 			conn.commit();
+			conn.setAutoCommit(true);
 			success=1;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			if(conn!=null){conn.rollback();success=0;}
+		}finally {
+			if(conn!=null){conn.close();}
 		}
 
 		return success;

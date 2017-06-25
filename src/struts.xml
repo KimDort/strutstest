@@ -5,4 +5,5 @@
 	<constant name="struts.action.extension" value="do"/>
 	<include file="struts-member.xml"></include>
 	<include file="struts-project.xml"></include>
+	<include file="struts-projectjoin.xml"></include>
 </struts>

@@ -33,13 +33,54 @@ public class ProjectService {
 		Connection conn=dbConn.getConnection();
 		ProjectDAO dao=new ProjectDAO(); 
 		try {
-			conn.setAutoCommit(false);
 			success=dao.register(conn, vo);
-			conn.commit();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			if(conn!=null){conn.rollback();success=0;}
+		}finally {
+			if(conn!=null){conn.close();}
+		}
+		return success;
+	}
+	
+	public Project read(int pno)throws SQLException{
+		Project project = new Project();
+		DBConn dbConn=new DBConn();
+		Connection conn=dbConn.getConnection();
+		ProjectDAO dao=new ProjectDAO();
+		try {
+			project=dao.read(conn, pno);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally {
+			if(conn!=null){conn.close();}
+		}
+		
+		return project;
+	}
+	public int modify(Project vo)throws SQLException{
+		int success=0;
+		DBConn dbConn=new DBConn();
+		Connection conn=dbConn.getConnection();
+		ProjectDAO dao=new ProjectDAO();
+		try {
+			success=dao.modify(conn, vo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(conn!=null){conn.close();}
+		}
+		return success;
+	}
+	
+	public int delete(int pno)throws SQLException{
+		int success=0;
+		DBConn dbConn=new DBConn();
+		Connection conn=dbConn.getConnection();
+		try {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}finally {
 			if(conn!=null){conn.close();}
 		}

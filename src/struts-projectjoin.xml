@@ -2,10 +2,12 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" 
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-    <package name="project" namespace="/project" extends="struts-default">
-    	<action name="list" class="com.icanman.action.project.ProjectListAction" >
+    <package name="projectjoin" namespace="/projectjoin" extends="struts-default">
+    	<action name="list" class="com.icanman.action.projectjoin.ProjectJoinListAction" >
+    		<interceptor-ref name="prepare"/>
+    		<interceptor-ref name="modelDriven"/>
     		<interceptor-ref name="params"/>
-    		<result name="success">/WEB-INF/jsp/project/list.jsp</result>
+    		<result name="success">/WEB-INF/jsp/projectjoin/list.jsp</result>
     	</action>
     	    
     	<action name="register" class="com.icanman.action.project.ProjectCreateFromAction">

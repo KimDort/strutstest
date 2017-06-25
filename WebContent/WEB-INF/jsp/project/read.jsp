@@ -66,43 +66,43 @@
 					<tr>
 							<th width="200px">Project Name</th>
 							<td>
-								<input type="text" placeholder="Please Write Name" class="form-control" name="name" readonly="readonly" value="${read.name }">
+								<input type="text" placeholder="Please Write Name" class="form-control" name="name" readonly="readonly" value="${project.name }">
 							</td>
 						</tr>
 						<tr>
 							<th>Content</th>
 							<td>
-								<input type="text" placeholder="Please Write Content" class="form-control" name="content" readonly="readonly" value="${read.content }">
+								<input type="text" placeholder="Please Write Content" class="form-control" name="content" readonly="readonly" value="${project.content }">
 							</td>
 						</tr>
 						<tr>
 							<th>Start Day</th>
 							<td>
-								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="startday" id="startday" readonly="readonly" value="${read.start }">
+								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="startday" id="startday" readonly="readonly" value="${project.start }">
 							</td>
 						</tr>
 						<tr>
 							<th>End Day</th>
 							<td>
-								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="endday" id="endday" readonly="readonly" value="${read.end }">
+								<input type="text" placeholder="Please Click And Select Date" class="form-control" name="endday" id="endday" readonly="readonly" value="${project.end }">
 							</td>
 						</tr>
 						<tr>
 							<th>Order Company</th>
 							<td>
-								<input type="text" placeholder="Please Write Date" class="form-control" name="ordercompany" readonly="readonly" value="${read.order_company }">
+								<input type="text" placeholder="Please Write Date" class="form-control" name="ordercompany" readonly="readonly" value="${project.order_company }">
 							</td>
 						</tr>
 						<tr>
 							<th>Create Skill</th>
 							<td>
-								<input type="text" placeholder="Please Write Date" class="form-control" name="createskill" id="createskill" value="${read.create_skill }" readonly="readonly">
+								<input type="text" placeholder="Please Write Date" class="form-control" name="createskill" id="createskill" value="${project.create_skill }" readonly="readonly">
 							</td>
 						</tr>
 						<tr>
 							<th>ETC</th>
 							<td>
-								<input type="text" placeholder="Please Write Date" class="form-control" name="etc" value="${read.etc }" readonly="readonly">
+								<input type="text" placeholder="Please Write Date" class="form-control" name="etc" value="${project.etc }" readonly="readonly">
 							</td>
 						</tr>
 					</tbody>

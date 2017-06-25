@@ -17,7 +17,7 @@
 <link href="${pageContext.request.contextPath }/css/style.css" rel="Stylesheet" type="text/css">
 <script>
 	function createItem(){
-		$("#frm").attr("action", '${pageContext.request.contextPath }/project/register.do?page=${cri.page}&perPageNum=${cri.perPageNum}');
+		$("#frm").attr("action", '${pageContext.request.contextPath }/project/register.do');
 		$("#frm").attr("method", "post");
 		$("#frm").submit();
 	}
@@ -34,7 +34,7 @@
 	function modifyProject(boardNum){
 		if(confirm("수정하시겠습니까?")){
 			$("#no").val(boardNum);
-			$("#frm").attr("action", '${pageContext.request.contextPath }/project/modifyForm.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no='+boardNum);
+			$("#frm").attr("action", '${pageContext.request.contextPath }/project/modify.do?pno='+boardNum);
 			$("#frm").attr("method", "post");
 			$("#frm").submit();
 		}else{
@@ -128,7 +128,7 @@
 					<tr>
 						<td>${idx.no }</td>
 						<td>
-							<a href="${pageContext.request.contextPath }/project/read.do?read=${idx.no}&page=${cri.page}&perPageNum=${cri.perPageNum}&loc=${cri.location}">
+							<a href="${pageContext.request.contextPath }/project/read.do?pno=${idx.no}&page=${cri.page}&perPageNum=${cri.perPageNum}&loc=${cri.location}">
 								${idx.name }
 							</a>
 						</td>
