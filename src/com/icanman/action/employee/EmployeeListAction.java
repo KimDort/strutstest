@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.icanman.model.Employee;
-import com.icanman.service.member.EmployeeService;
+import com.icanman.service.employee.EmployeeService;
 import com.icanman.tools.SearchCriteria;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ModelDriven;

@@ -9,13 +9,6 @@ public class ProjectJoin extends Project{
 	private String out;
 	private String member;
 	private String project;
-	
-	public String getProject() {
-		return project;
-	}
-	public void setProject(String project) {
-		this.project = project;
-	}
 	public int getNo() {
 		return no;
 	}
@@ -58,5 +51,11 @@ public class ProjectJoin extends Project{
 	public void setMember(String member) {
 		this.member = member;
 	}
-		
+	public String getProject() {
+		return project;
+	}
+	public void setProject(String project) {
+		this.project = project;
+	}
+	
 }

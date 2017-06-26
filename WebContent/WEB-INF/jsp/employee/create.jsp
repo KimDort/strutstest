@@ -69,7 +69,7 @@
 			dateFormat:'yy-mm-dd', changeMonth: true, changeYear: true, nextText: '다음 달', prevText: '이전 달'});
 		$("input[name='career.period_end']").datepicker({
 			dateFormat:'yy-mm-dd', changeMonth: true, changeYear: true, nextText: '다음 달', prevText: '이전 달'});
-		$("input[name='career.license_date']").datepicker({
+		$("input[name='license.license_date']").datepicker({
 			dateFormat:'yy-mm-dd', changeMonth: true, changeYear: true, nextText: '다음 달', prevText: '이전 달'});
 		$("input[name='employee.join']").datepicker({
 			dateFormat:'yy-mm-dd', changeMonth: true, changeYear: true, nextText: '다음 달', prevText: '이전 달'});

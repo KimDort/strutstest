@@ -44,7 +44,7 @@ function addMember(){
 		<input type="hidden" name="pno" value="${project }">
 			<table class="table table-default">
 				<tbody>
-					<c:if test="${cri.location eq 'projectwork' }">
+					<c:if test="${cri.location eq 'projectjoin' }">
 						<tr>
 							<th>Project List</th>
 							<td>

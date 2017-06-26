@@ -27,21 +27,44 @@ public class ProjectJoinDAO {
 			pstmt.setInt(1, cri.getPageStart());
 			pstmt.setInt(2, cri.getPerPageNum());
 			rs=pstmt.executeQuery();
-			while(rs.next()){
+			for(int idx=0;rs.next();idx++){
 				ProjectJoin vo = new ProjectJoin();
-				vo.setNo(rs.getInt("JOIN_NO"));
-				vo.setMno(rs.getInt("MEMBER_NO"));
-				vo.setPno(rs.getInt("PROJECT_NO"));
-				vo.setPosition(rs.getString("JOIN_POSITION"));
-				vo.setJoin(rs.getString("JOIN_IN").substring(0, 10));
-				vo.setOut(rs.getString("JOIN_OUT").substring(0, 10));
-				vo.setProject(rs.getString("PROJECT_NAME"));
-				vo.setMember(rs.getString("EMPLOYEE"));
+				/*vo.setNo(rs.getInt("JOIN_NO"));
+				vo.setMno(mnoArray);
+				vo.setPno(pnoArray);
+				vo.setPosition(positionArray);
+				vo.setJoin(joinArray);
+				vo.setOut(outArray);
+				vo.setMember(memberArray);
+				vo.setProject(projectArray);*/
 				list.add(vo);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	public int register(Connection conn, ProjectJoin vo)throws SQLException{
+		PreparedStatement pstmt=null;
+		int success=0;
+		String sql="INSERT INTO PROJECT_JOIN VALUES(PROJECTJOINSEQ.NEXTVAL, ?, ?, ?, ?, ?,)";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			/*for(int idx=0; idx<vo.getMno().length;idx++){
+				pstmt.setInt(1, vo.getMno()[idx]);
+				pstmt.setInt(2, vo.getPno()[idx]);
+				pstmt.setString(3, vo.getPosition()[idx]);
+				pstmt.setString(4, vo.getJoin()[idx]);
+				pstmt.setString(5, vo.getOut()[idx]);
+				success=pstmt.executeUpdate();
+			}*/
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			success=0;
+		}
+		
+		return success;
 	}
 }

@@ -1,22 +1,39 @@
-package com.icanman.action.employee;
+package com.icanman.action.projectjoin;
 
+import com.icanman.model.ProjectJoin;
+import com.icanman.service.projectjoin.ProjectJoinService;
 import com.icanman.tools.SearchCriteria;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ModelDriven;
 import com.opensymphony.xwork2.Preparable;
 
-public class EmployeeFromAction implements Action{
-	private SearchCriteria cri;
+public class ProjectJoinCreateAction implements Action, Preparable, ModelDriven{
 	private int page;
 	private int perPageNum;
+	private SearchCriteria cri;
+	private ProjectJoin projectJoin;
+	
+	@Override
+	public Object getModel() {
+		// TODO Auto-generated method stub
+		return projectJoin;
+	}
+
+	@Override
+	public void prepare() throws Exception {
+		projectJoin=new ProjectJoin();
+	}
+
 	@Override
 	public String execute() throws Exception {
-		cri=new SearchCriteria();
+		cri = new SearchCriteria();
 		cri.setPage(page);
 		cri.setPerPageNum(perPageNum);
+		ProjectJoinService projectJoinService = new ProjectJoinService();
+		
 		return "success";
 	}
-	
+
 	public int getPage() {
 		return page;
 	}

@@ -20,6 +20,14 @@ public class Employee {
 	private String position;
 	private char isexit='N';
 	private int projecthistory;
+	private int rowNum;
+	
+	public int getRowNum() {
+		return rowNum;
+	}
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
 	public int getNo() {
 		return no;
 	}

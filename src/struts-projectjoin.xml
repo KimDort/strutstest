@@ -10,11 +10,11 @@
     		<result name="success">/WEB-INF/jsp/projectjoin/list.jsp</result>
     	</action>
     	    
-    	<action name="register" class="com.icanman.action.project.ProjectCreateFromAction">
+    	<action name="register" class="com.icanman.action.projectjoin.ProjectJoinCreateFromAction">
     		<interceptor-ref name="params"/>
-    		<result name="success">/WEB-INF/jsp/project/create.jsp</result>
+    		<result name="success">/WEB-INF/jsp/projectjoin/create.jsp</result>
     	</action>
-    	<action name="registerDone" class="com.icanman.action.project.ProjectCreateAction">
+    	<action name="registerDone" class="com.icanman.action.projectjoin.ProjectJoinCreateAction">
     		<interceptor-ref name="prepare"/>
     		<interceptor-ref name="modelDriven"/>
     		<interceptor-ref name="params"/>

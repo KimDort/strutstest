@@ -1,22 +1,24 @@
-package com.icanman.action.employee;
+package com.icanman.action.projectjoin;
 
 import com.icanman.tools.SearchCriteria;
 import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ModelDriven;
-import com.opensymphony.xwork2.Preparable;
 
-public class EmployeeFromAction implements Action{
-	private SearchCriteria cri;
+public class ProjectJoinCreateFromAction implements Action{
 	private int page;
 	private int perPageNum;
+	private String location;
+	private SearchCriteria cri;
+	
 	@Override
 	public String execute() throws Exception {
-		cri=new SearchCriteria();
+		cri = new SearchCriteria();
 		cri.setPage(page);
 		cri.setPerPageNum(perPageNum);
+		cri.setLocation(location);
+		
 		return "success";
 	}
-	
+
 	public int getPage() {
 		return page;
 	}
@@ -39,6 +41,14 @@ public class EmployeeFromAction implements Action{
 
 	public void setCri(SearchCriteria cri) {
 		this.cri = cri;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	
 }

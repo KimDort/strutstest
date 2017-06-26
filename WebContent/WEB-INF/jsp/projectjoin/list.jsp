@@ -115,7 +115,7 @@
 						<td>${idx.name eq list[status.index+1].name ?'':idx.name}</td>
 						<td><a href="#" onclick="userInfo(${idx.mno})"
 						data-toggle="modal" data-target="#userInfoModal">${idx.member }</a></td>
-						<td>${idx.position}</td>
+						<td>${idx.position[status.idx]}</td>
 						<td>${idx.joinday }</td>
 						<td>${idx.outday }</td>
 						<c:choose>

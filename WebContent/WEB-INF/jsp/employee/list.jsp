@@ -172,10 +172,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${list }" var="idx">
+				<c:forEach items="${list }" var="idx" varStatus="status">
 				<c:set var="skill" value="${fn:split(idx.haveskill, ',') }"/>
 				<tr>				
-					<td>${idx.no }</td>
+					<td>${idx.no}</td>
 					<td>
 						<a href="${pageContext.request.contextPath }/member/read.do?page=${cri.page}&perPageNum=${cri.perPageNum}&member=${idx.no}">${idx.name }</a>
 					</td>
