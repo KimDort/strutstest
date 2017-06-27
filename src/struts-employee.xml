@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" 
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="employee" namespace="/employee" extends="struts-default">
+    	<action name="list" class="com.icanman.employee.action.EmployeeListAction">
+    		<interceptor-ref name="prepare"/>
+    		<interceptor-ref name="modelDriven"/>
+    		<interceptor-ref name="params"/>
+    		<result name="success">/WEB-INF/jsp/employee/list.jsp</result>
+    	</action>    
+    	
+    	<action name="register" class="com.icanman.employee.action.EmployeeFromAction">
+    		<interceptor-ref name="params"/>
+    		<result name="success">/WEB-INF/jsp/employee/create.jsp</result>
+    	</action>
+    		
+    	<action name="registerDone" class="com.icanman.employee.action.EmployeeCreateAction">
+    		<interceptor-ref name="params"/>
+    		<result name="input">/WEB-INF/jsp/employee/create.jsp</result>	
+    		<result name="success" type="redirectAction">
+    			<param name="actionName">list</param>
+    			<param name="page">${page}</param>
+    			<param name="perPageNum">${perPageNum}</param>
+    		</result>
+    	</action>
+    </package>
+</struts>

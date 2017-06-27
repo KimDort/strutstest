@@ -78,6 +78,10 @@
 	});
 	
 	$(document).ready(function(){
+		if("${val}"!=null){
+			alert("${val.get(0).message}");
+			$("input[name='${val.get(0).focus}']").eq("${val.get(0).index}").focus();
+		}
 		$("#career-group").css("display","none");
 		$("#testbtn").on("click",function(){
 			testChecker($("#frm"));
@@ -153,27 +157,7 @@
 			}
 		});
 		$("#submititem").on("click", function(){
-			$("#frm").attr("action","${pageContext.request.contextPath }/employee/registerDone.do");
-			$("#frm").attr("method", "post");
 			$("#frm").submit();
-			/* var checkCareer=$("#isnew option:selected").val();
-			
-			if(!checkBaseInfo($("#frm"))){
-				return;
-			}else{
-				if(!checkCareerBox(checkCareer)){
-					return;
-				}else{
-					completeInput('${cri.page}', '${cri.perPageNum}');	
-					if(!checkDateCareer()){
-						return;
-					}else if(!checkLicenseBox()){
-						return;
-					}else{
-						
-					}
-				}			
-			} */
 		});
 	});
 	
@@ -200,7 +184,7 @@
   			</ul>
 			</div>
 			<div class="col-md-12 borderBox" >
-			<form class="form-inline" id="frm">
+			<form class="form-inline" id="frm" action="${pageContext.request.contextPath }/employee/registerDone.do" method="post">
 			<input type="hidden" name="page" value="${cri.page }">
 			<input type="hidden" name="perPageNum" value="${cri.perPageNum }">
 				<table class="table table-hover" style="width: 100%;">
@@ -213,11 +197,11 @@
 						<tr>
 							<th width="200px">Name</th>
 							<td>
-								<input type="text" placeholder="Please Write Name" class="form-control" name="employee.name" id="name">
+								<input type="text" placeholder="Please Write Name" class="form-control" name="employee.name" id="name" value="${employee.name }">
 							</td>
 							<th>Company</th>
 							<td>
-								<input type="text" name="employee.company" class="form-control" id="company">
+								<input type="text" name="employee.company" class="form-control" id="company" value="${employee.company }">
 							</td>
 						</tr>
 						<tr>
@@ -241,14 +225,14 @@
 								</select>
 							</td>
 							<th>Position/Work</th>
-							<td><input type="text" class="form-control" id="position" name="employee.position"></td>
+							<td><input type="text" class="form-control" id="position" name="employee.position" value="${employee.position }"></td>
 						</tr>
 						<tr>
 							<th>
 								Join Company Date
 							</th>
 							<td>
-								<input type="text" name="employee.join" class="form-control" readonly="readonly" id="joincompany">
+								<input type="text" name="employee.join" class="form-control" readonly="readonly" id="joincompany" value="${employee.join }">
 							</td>
 							<th>
 								Out Company Date
@@ -274,7 +258,7 @@
 								Have Skills
 							</th>
 							<td colspan="3">
-								<input type="text" name="employee.haveskill" class="form-control" id="skills" placeholder="JAVA, SPRING, ...">
+								<input type="text" name="employee.haveskill" class="form-control" id="skills" placeholder="JAVA, SPRING, ..." value="${employee.haveskill}">
 							</td>
 							
 						</tr>
@@ -283,17 +267,17 @@
 								ID Number
 							</th>
 							<td colspan="3">
-								<input type="text" name="employee.idnumber1" class="form-control" maxlength="6" id="idnumber1" placeholder="123456">&nbsp;-
-								<input type="password" name="employee.idnumber2" class="form-control" maxlength="7" id="idnumber2" placeholder="1234567">
+								<input type="text" name="employee.idnumber1" class="form-control" maxlength="6" id="idnumber1" placeholder="123456" value="${employee.idnumber1 }">&nbsp;-
+								<input type="password" name="employee.idnumber2" class="form-control" maxlength="7" id="idnumber2" placeholder="1234567" value="${employee.idnumber2 }">
 							</td>
 							
 						</tr>
 						<tr>
 							<th>Address</th>
 							<td colspan="3">
-								<input type="text" name="employee.zipcode" id="zipcode" class="form-control" readonly="readonly">
-								<input type="text" name="employee.address" id="address" class="form-control" readonly="readonly">
-								<input type="text" name="employee.address_detail" id="address_detail" class="form-control">
+								<input type="text" name="employee.zipcode" id="zipcode" class="form-control" readonly="readonly" value="${employee.zipcode }">
+								<input type="text" name="employee.address" id="address" class="form-control" readonly="readonly" value="${employee.address }">
+								<input type="text" name="employee.address_detail" id="address_detail" class="form-control" value="${employee.address_detail }">
 								<input type="button" class="btn btn-default" value="Search" onclick="address_search()" id="search">
 							</td>
 						</tr>
