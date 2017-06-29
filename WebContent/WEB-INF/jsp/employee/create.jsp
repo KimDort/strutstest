@@ -48,13 +48,11 @@
 	};
 	$(document).ready(function(){
 		$("#submititem").on("click", function(){
-			if(Boolean("${val.getTrue()}")==true){
-				if(confirm("등록하시겠습니까?")){
-					$("#frm").submit();
-				}else{
-					return;
-				}
-			}		
+			if(confirm("등록하시겠습니까?")){
+				$("#frm").submit();
+			}else{
+				return;
+			}	
 		});	
 	});
 	</script>

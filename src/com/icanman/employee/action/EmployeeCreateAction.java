@@ -8,6 +8,7 @@ import com.icanman.employee.model.Employee;
 import com.icanman.employee.model.License;
 import com.icanman.employee.model.Validate;
 import com.icanman.employee.service.EmployeeService;
+import com.icanman.employee.service.EmployeeValidateService;
 import com.icanman.tools.SearchCriteria;
 import com.icanman.tools.Tools;
 import com.icanman.tools.BaseValidate;
@@ -28,8 +29,7 @@ public class EmployeeCreateAction implements Action{
 	
 	@Override
 	public String execute() throws Exception {
-		BaseValidate vali = new BaseValidate();
-		Tools tool=new Tools();
+		EmployeeValidateService vali = new EmployeeValidateService();
 		careerList = new ArrayList<>();
 		licenseList = new ArrayList<>();
 		cri=new SearchCriteria();
@@ -39,6 +39,13 @@ public class EmployeeCreateAction implements Action{
 		
 		String result="";
 		System.out.println();
+		
+		val=vali.employeeNullCheck(employee);
+		if(val.getTrue()){
+			return "success";
+		}else{
+			return "input";
+		}
 		//유효성 검사 기준으로 등록		
 		/*if(career!=null){
 			careerList=tool.createList(career);
@@ -47,15 +54,14 @@ public class EmployeeCreateAction implements Action{
 			licenseList=tool.createList(license);
 		}
 		val=vali.totalValidation(employee, career, license);*/
-		System.out.println("액션 클래스에 넘어오는 최종 값 : "+val.getTrue());
+		/*System.out.println("액션 클래스에 넘어오는 최종 값 : "+val.getTrue());
 		if(val.getTrue()){
 			//employeeService.register(employee, career, license);
 			result="success";
 		}else{
 			result="input";
-		}
+		}*/
 		
-		return result;
 	}
 	
 	public List<Career> getCareerList() {
