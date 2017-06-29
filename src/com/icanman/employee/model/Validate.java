@@ -3,7 +3,7 @@ package com.icanman.employee.model;
 public class Validate {
 	private String focus;
 	private String message;
-	private boolean isTrue;
+	private Boolean check;
 	private int index=0;
 	
 	public int getIndex() {
@@ -24,11 +24,11 @@ public class Validate {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public boolean isTrue() {
-		return isTrue;
+	public Boolean getTrue() {
+		return this.check;
 	}
-	public void setTrue(boolean isTrue) {
-		this.isTrue = isTrue;
+	public void setTrue(Boolean isTrue) {
+		this.check = isTrue;
 	}
 	
 }

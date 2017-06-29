@@ -47,7 +47,7 @@
 		$("#period_modal_body").append(str);	
 	}
 	function modifyMember(no){
-		$(location).attr("href",'${pageContext.request.contextPath }/employee/modify.do?page=${cri.page}&perPageNum=${cri.perPageNum}&mno='+no);
+		$(location).attr("href",'${pageContext.request.contextPath }/employee/modify.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no='+no);
 	}
 	function createMember(){
 		$(location).attr('href','${pageContext.request.contextPath }/employee/register.do?page=${cri.page}&perPageNum=${cri.perPageNum}');
@@ -55,7 +55,7 @@
 	function deleteMember(no){
 		if(confirm("정말 삭제하시겠습니까?")){
 			if(confirm("삭제 하시면 되돌릴 수 없습니다.\n정말 삭제하시겠습니까?")){
-				$(location).attr('href','${pageContext.request.contextPath }/member/remove.do?page=${cri.page}&perPageNum=${cri.perPageNum}&mno='+no);
+				$(location).attr('href','${pageContext.request.contextPath }/employee/remove.do?page=${cri.page}&perPageNum=${cri.perPageNum}&mno='+no);
 			}else{
 				
 			}
@@ -177,7 +177,7 @@
 				<tr>				
 					<td>${idx.no}</td>
 					<td>
-						<a href="${pageContext.request.contextPath }/member/read.do?page=${cri.page}&perPageNum=${cri.perPageNum}&member=${idx.no}">${idx.name }</a>
+						<a href="${pageContext.request.contextPath }/employee/read.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no=${idx.no}">${idx.name }</a>
 					</td>
 					<td align="center">
 					<c:set var="totalYear" value="0"/>

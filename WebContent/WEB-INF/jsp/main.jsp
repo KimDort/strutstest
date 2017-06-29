@@ -22,7 +22,7 @@
 		<div class="row">
 			<div class="col-sm-6 borderBox">
 			<label>Member</label>
-			<label style="float: right"><a href="${pageContext.request.contextPath }/member/list.do?page=1&perPageNum=10">more</a></label>
+			<label style="float: right"><a href="${pageContext.request.contextPath }/employee/list.do?page=1&perPageNum=10">more</a></label>
 			<table class="table table-hover">
 				<thead>
 					<tr>

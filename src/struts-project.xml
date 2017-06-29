@@ -3,16 +3,16 @@
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <package name="project" namespace="/project" extends="struts-default">
-    	<action name="list" class="com.icanman.action.project.ProjectListAction" >
+    	<action name="list" class="com.icanman.project.action.ProjectListAction" >
     		<interceptor-ref name="params"/>
     		<result name="success">/WEB-INF/jsp/project/list.jsp</result>
     	</action>
     	    
-    	<action name="register" class="com.icanman.action.project.ProjectCreateFromAction">
+    	<action name="register" class="com.icanman.project.action.ProjectCreateFromAction">
     		<interceptor-ref name="params"/>
     		<result name="success">/WEB-INF/jsp/project/create.jsp</result>
     	</action>
-    	<action name="registerDone" class="com.icanman.action.project.ProjectCreateAction">
+    	<action name="registerDone" class="com.icanman.project.action.ProjectCreateAction">
     		<interceptor-ref name="prepare"/>
     		<interceptor-ref name="modelDriven"/>
     		<interceptor-ref name="params"/>
@@ -23,16 +23,16 @@
     		</result>
     	</action>
     	
-    	<action name="read" class="com.icanman.action.project.ProjectReadAction">
+    	<action name="read" class="com.icanman.project.action.ProjectReadAction">
     		<interceptor-ref name="params"/>
     		<result name="success">/WEB-INF/jsp/project/read.jsp</result>
     	</action>
     	
-    	<action name="modify" class="com.icanman.action.project.ProjectModifyFromAction">
+    	<action name="modify" class="com.icanman.project.action.ProjectModifyFromAction">
     		<interceptor-ref name="params"/>
     		<result name="success">/WEB-INF/jsp/project/modify.jsp</result>
     	</action>
-    	<action name="modifyDone" class="com.icanman.action.project.ProjectModifyAction">
+    	<action name="modifyDone" class="com.icanman.project.action.ProjectModifyAction">
     		<interceptor-ref name="prepare"/>
     		<interceptor-ref name="modelDriven"/>
     		<interceptor-ref name="params"/>

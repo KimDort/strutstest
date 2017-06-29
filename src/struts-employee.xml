@@ -24,5 +24,15 @@
     			<param name="perPageNum">${perPageNum}</param>
     		</result>
     	</action>
+    	
+    	<action name="read" class="com.icanman.employee.action.EmployeeReadAction">
+    		<interceptor-ref name="params"/>
+    		<result name="success">/WEB-INF/jsp/employee/read.jsp</result>
+    	</action>
+    	
+    	<action name="modify" class="com.icanman.employee.action.EmployeeModifyFromAction">
+    		<interceptor-ref name="params"/>
+    		<result name="success">/WEB-INF/jsp/employee/modify.jsp</result>
+    	</action>
     </package>
 </struts>

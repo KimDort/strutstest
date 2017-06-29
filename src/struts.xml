@@ -4,6 +4,6 @@
 <struts>
 	<constant name="struts.action.extension" value="do"/>
 	<include file="struts-employee.xml"></include>
-	<!-- <include file="struts-project.xml"></include>
-	<include file="struts-projectjoin.xml"></include> -->
+	<include file="struts-project.xml"></include>
+	<include file="struts-projectjoin.xml"></include>
 </struts>

@@ -72,7 +72,7 @@ public class EmployeeDAO{
 		try {
 			String sql="INSERT INTO EMPLOYEE VALUES(EMPLOYEESEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			pstmt=conn.prepareStatement(sql);
-			int idx=0;
+			int idx=1;
 			pstmt.setString(idx++, vo.getName());
 			pstmt.setString(idx++, vo.getCompany());
 			pstmt.setString(idx++, vo.getIdnumber1()+"-"+vo.getIdnumber2());
@@ -96,5 +96,40 @@ public class EmployeeDAO{
 		}
 		return success;
 	}
-
+	
+	//Read Employee 
+	public Employee read(Connection conn, int no){
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		Employee employee = null;
+		try {
+			employee = new Employee();
+			String sql="SELECT * FROM EMPLOYEE WHERE MEMBER_NO = ? AND MEMBER_ISEXIT != 'Y'";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs=pstmt.executeQuery();
+			while(rs.next()){
+				employee.setNo(rs.getInt("MEMBER_NO"));
+				employee.setName(rs.getString("MEMBER_NAME"));
+				employee.setCompany(rs.getString("MEMBER_COMPANY"));
+				employee.setIdnumber1(rs.getString("MEMBER_IDNUMBER").split("-")[0]);
+				employee.setIdnumber2(rs.getString("MEMBER_IDNUMBER").split("-")[1]);
+				employee.setZipcode(rs.getString("MEMBER_ZIPCODE"));
+				employee.setAddress(rs.getString("MEMBER_ADDRESS"));
+				employee.setAddress_detail(rs.getString("MEMBER_ADDRESS_DETAIL"));
+				employee.setRank(rs.getString("MEMBER_RANK"));
+				employee.setJoin(rs.getString("MEMBER_JOIN").substring(0,10));
+				employee.setOut(rs.getString("MEMBER_OUT"));
+				employee.setIsnew(rs.getString("MEMBER_ISNEW"));
+				employee.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
+				employee.setIsexit(rs.getString("MEMBER_ISEXIT").charAt(0));
+				employee.setPosition(rs.getString("MEMBER_POSITION"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (SQLException e) {e.printStackTrace();}}
+		}
+		return employee;
+	}
 }

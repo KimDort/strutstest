@@ -14,27 +14,25 @@
 <link href="${pageContext.request.contextPath }/css/style.css" rel="Stylesheet" type="text/css">
 <script>
 	$(document).ready(function(){
-		var rank="${readMember.member_rank}";
+		var rank="${employee.rank}";
+		
 		$("#rank").val(rank).attr("selected","selected");
 		
-		var idnumber="${readMember.member_idnumber}".split("-");
-		$("#idnumber1").val(idnumber[0]);
-		$("#idnumber2").val(idnumber[1]);
 		$("#idnumber1, #idnumber2").attr("readonly", "readonly");
-		
-		if(idnumber[1].substring(0,1)=='1' || idnumber[1].substring(0,1)=='3'){
-			$("#gender").val("남");
-		}else if(idnumber[1].substring(0,1)=='2' || idnumber[1].substring(0,1)=='4'){
+		var idnumber=$("#idnumber2").val()
+		if(Number(idnumber.substring(0,1))%2==0){
 			$("#gender").val("여");
+		}else{
+			$("#gender").val("남");
 		}
 	});
 	function modifyMember(no){
-		$(location).attr("href",'${pageContext.request.contextPath }/member/modifyForm.do?page=${cri.page}&perPageNum=${cri.perPageNum}&mno='+no);
+		$(location).attr("href",'${pageContext.request.contextPath }/employee/modifyForm.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no='+no);
 	}
 	function deleteMember(no){
 		if(confirm("정말 삭제하시겠습니까?")){
 			if(confirm("삭제 하시면 되돌릴 수 없습니다.\n정말 삭제하시겠습니까?")){
-				$(location).attr('href','${pageContext.request.contextPath }/member/remove.do?page=${cri.page}&perPageNum=${cri.perPageNum}&mno='+no);
+				$(location).attr('href','${pageContext.request.contextPath }/employee/remove.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no='+no);
 			}else{
 				
 			}
@@ -43,7 +41,7 @@
 		}
 	}
 	function goList(){
-		$(location).attr("href",'${pageContext.request.contextPath }/member/list.do?page=${cri.page}&perPageNum=${cri.perPageNum}');
+		$(location).attr("href",'${pageContext.request.contextPath }/employee/list.do?page=${cri.page}&perPageNum=${cri.perPageNum}');
 	}
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -57,7 +55,7 @@
 			<div class="col-md-12 borderBox">
 			<ul class="breadcrumb">
     			<li><a href="${pageContext.request.contextPath }/main.do">Home</a></li>
-   				<li><a href="${pageContext.request.contextPath }/member/list.do?page=${cri.page}&perPageNum=${cri.perPageNum}">Member</a></li>   
+   				<li><a href="${pageContext.request.contextPath }/employee/list.do?page=${cri.page}&perPageNum=${cri.perPageNum}">Member</a></li>   
    				<li class="active">Member Create</li>     
   			</ul>
 			</div>
@@ -73,7 +71,7 @@
 						<tr>
 							<th width="200px">Name</th>
 							<td>
-								<input type="text" placeholder="Please Write Name" class="form-control" value="${readMember.member_name }" readonly="readonly">
+								<input type="text" placeholder="Please Write Name" class="form-control" value="${employee.name }" readonly="readonly">
 							</td>
 							<th>Gender</th>
 							<td><input type="text" class="form-control" id="gender" readonly="readonly"></td>
@@ -99,7 +97,7 @@
 							</td>
 							<th>Company</th>
 							<td>
-								<input type="text" name="company" class="form-control" value="${readMember.member_company }" readonly="readonly">
+								<input type="text" name="company" class="form-control" value="${employee.company }" readonly="readonly">
 							</td>
 						</tr>
 						<tr>
@@ -107,7 +105,7 @@
 								Join Company Date
 							</th>
 							<td>
-								<input type="text" name="joincompany" class="form-control" value="${readMember.member_join }" readonly="readonly">
+								<input type="text" name="joincompany" class="form-control" value="${employee.join }" readonly="readonly">
 							</td>
 							<th>
 								Out Company Date
@@ -121,7 +119,7 @@
 								Work
 							</th>
 							<td>
-								<input type="text" class="form-control" value="${readMember.member_isnew }" readonly="readonly">
+								<input type="text" class="form-control" value="${employee.isnew }" readonly="readonly">
 							</td>
 						</tr>
 						<tr>
@@ -129,7 +127,7 @@
 								Position
 							</th>
 							<td colspan="3">
-								<input type="text" name="position" class="form-control" id="position" value="${readMember.member_position }" readonly="readonly">
+								<input type="text" name="position" class="form-control" id="position" value="${employee.position }" readonly="readonly">
 							</td>
 							
 						</tr>
@@ -138,7 +136,7 @@
 								Have Skills
 							</th>
 							<td colspan="3">
-								<input type="text" name="haveskills" class="form-control" id="skills" value="${readMember.member_haveskill }" readonly="readonly">
+								<input type="text" name="haveskills" class="form-control" id="skills" value="${employee.haveskill }" readonly="readonly">
 							</td>
 							
 						</tr>
@@ -147,22 +145,22 @@
 								ID Number
 							</th>
 							<td colspan="3">
-								<input type="text" name="idnumber1" class="form-control" maxlength="6" id="idnumber1">&nbsp;-
-								<input type="text" name="idnumber2" class="form-control" maxlength="7" id="idnumber2">
+								<input type="text" name="idnumber1" class="form-control" maxlength="6" id="idnumber1" value="${employee.idnumber1 }">&nbsp;-
+								<input type="text" name="idnumber2" class="form-control" maxlength="7" id="idnumber2" value="${employee.idnumber2 }">
 							</td>
 							
 						</tr>
 						<tr>
 							<th>Address</th>
 							<td colspan="3">
-								<input type="text" name="zipcode" id="zipcode" class="form-control" readonly="readonly" value='${readMember.member_zipcode }'>
-								<input type="text" name="address" id="address" class="form-control" readonly="readonly" value="${readMember.member_address }">
-								<input type="text" name="address_detail" id="address_detail" class="form-control" readonly="readonly" value="${readMember.member_address_detail }">
+								<input type="text" name="zipcode" id="zipcode" class="form-control" readonly="readonly" value='${employee.zipcode }'>
+								<input type="text" name="address" id="address" class="form-control" readonly="readonly" value="${employee.address }">
+								<input type="text" name="address_detail" id="address_detail" class="form-control" readonly="readonly" value="${employee.address_detail }">
 							</td>
 						</tr>
 					</tbody>
 				</table>
-				<c:if test="${not empty readCareer }">
+				<c:if test="${not empty careerList }">
 					<table class="table table-default exp_line_box">
 					<thead>
 						<tr>
@@ -170,30 +168,25 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${readCareer }" var="idx">
+						<c:forEach items="${careerList }" var="idx">
 							<tr>
 								<th width="50px">Period Start</th>
 								<td><input type="text" class="form-control" value="${idx.period_start }" readonly="readonly" style="width: 100px"></td>
 								<th width="50px">Period End</th>
 								<td><input type="text" class="form-control" value="${idx.period_end }" readonly="readonly" style="width: 100px"></td>
-								<th width="50px">Career Date</th>
+								<th width="100px">Career Date</th>
 								<td>
-									<fmt:parseNumber value="${idx.period_start.time / (1000 * 60 * 60 * 24) }" integerOnly="true" var="start"/>
-									<fmt:parseNumber value="${idx.period_end.time / (1000 * 60 * 60 * 24) }" integerOnly="true" var="end"/>
-									<fmt:parseNumber integerOnly="true" value="${(end - start) / 365 }" var="year" />
-									<fmt:parseNumber integerOnly="true" value="${((end - start) / 30)%12}" var="month" />
-									<input type="text" value='${year > 0 ? year:"" }<c:out value="${year > 0 ? '년':'' }" />${month > 0 ? month:"" }<c:out value="${month > 0 ? '개월':'경력없음' }" />'
-									 class="form-control" readonly="readonly" style="width: 100px">
+									${idx.getDateDifference() }
 								</td>
-								<th width="100px">Company</th><td><input type="text" class="form-control" value="${idx.company }" readonly="readonly"></td>
-								<th width="100px">Rank</th><td><input type="text" class="form-control" value="${idx.rank }" readonly="readonly" style="width: 100px"></td>
-								<th width="100px">Position</th><td><input type="text" class="form-control" value="${idx.position }" readonly="readonly"></td>
+								<th width="80px">Company</th><td><input type="text" class="form-control" value="${idx.period_company }" readonly="readonly" style="width: 100px;"></td>
+								<th width="100px">Rank</th><td><input type="text" class="form-control" value="${idx.period_rank }" readonly="readonly" style="width: 100px"></td>
+								<th width="100px">Position</th><td><input type="text" class="form-control" value="${idx.period_position }" readonly="readonly" style="width: 100px;"></td>
 							</tr>
 						</c:forEach>
 					</tbody>
 					</table>
 				</c:if>
-				<c:if test="${not empty readLicense}">
+				<c:if test="${not empty licenseList}">
 					<table class="table table-default license_line_box">
 				<thead>
 					<tr>
@@ -201,24 +194,24 @@
 					</tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${readLicense }" var="idx">
+				<c:forEach items="${licenseList }" var="idx">
 					<tr>
 						<th width="100px">Name</th>
-						<td><input type="text" class="form-control" value="${idx.name }" readonly="readonly"></td>
+						<td><input type="text" class="form-control" value="${idx.license_name }" readonly="readonly"></td>
 						<th width="100px">Level</th>
-						<td><input type="text" class="form-control" value="${idx.level }" readonly="readonly"></td>
+						<td><input type="text" class="form-control" value="${idx.license_level }" readonly="readonly"></td>
 						<th width="100px">Get Date</th>
-						<td><input type="text" class="form-control" value="${idx.getdate }" readonly="readonly"></td>
+						<td><input type="text" class="form-control" value="${idx.license_date }" readonly="readonly"></td>
 						<th width="200px">Publisher</th>
-						<td><input type="text" class="form-control" value="${idx.publisher }" readonly="readonly"></td>
+						<td><input type="text" class="form-control" value="${idx.license_publisher }" readonly="readonly"></td>
 					</tr>
 				</c:forEach>
 				</tbody>
 				</table>
 				</c:if>
 				<div class="col-md-4 buttonBox">
-					<input type="button" class="btn btn-default" value="Modify" onclick="modifyMember(${readMember.member_no})">
-					<input type="button" class="btn btn-default" value="Delete" onclick="deleteMember(${readMember.member_no})">
+					<input type="button" class="btn btn-default" value="Modify" onclick="modifyMember(${employee.no})">
+					<input type="button" class="btn btn-default" value="Delete" onclick="deleteMember(${employee.no})">
 					<input type="button" class="btn btn-default" value="List" onclick="goList()">
 				</div>
 			</form>
