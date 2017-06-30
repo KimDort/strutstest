@@ -43,7 +43,7 @@ public class EmployeeModifyAction implements Action{
 		
 		val=vali.totalValidateMethod(employee, career, license);
 		if(val.getTrue()){
-			
+			employee.setNo(no);
 			return "success";
 		}else{
 			return "input";

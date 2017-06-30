@@ -132,4 +132,39 @@ public class EmployeeDAO{
 		}
 		return employee;
 	}
+	
+	public int update(Connection conn, Employee employee)throws Exception{
+		int success=0;
+		PreparedStatement pstmt=null;
+		
+		try {
+			String sql="UPDATE EMPLOYEE SET "
+					+ "		MEMBER_NAME=?, MEMBER_COMPANY=?, MEMBER_IDNUMBER=?, MEMBER_ZIPCODE=?,"
+					+ "		MEMBER_ADDRESS=?, MEMBER_ADDRESS_DETAIL=?, MEMBER_RANK=?, MEMBER_JOIN=?,"
+					+ "		MEMBER_OUT=?, MEMBER_ISNEW=?, MEMBER_HAVESKILL=?, MEMBER_POSITION=?"
+					+ "	WHERE MEMBER_NO=?";
+			pstmt=conn.prepareStatement(sql);
+			int idx=1;
+			pstmt.setString(idx++, employee.getName());
+			pstmt.setString(idx++, employee.getCompany());
+			pstmt.setString(idx++, employee.getIdnumber1()+"-"+employee.getIdnumber2());
+			pstmt.setString(idx++, employee.getZipcode());
+			pstmt.setString(idx++, employee.getAddress());
+			pstmt.setString(idx++, employee.getAddress_detail());
+			pstmt.setString(idx++, employee.getRank());
+			pstmt.setString(idx++, employee.getJoin());
+			pstmt.setString(idx++, employee.getOut());
+			pstmt.setString(idx++, employee.getIsnew());
+			pstmt.setString(idx++, employee.getHaveskill());
+			pstmt.setString(idx++, employee.getPosition());
+			pstmt.setInt(idx++, employee.getNo());
+			success=pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		return success;
+	}
 }

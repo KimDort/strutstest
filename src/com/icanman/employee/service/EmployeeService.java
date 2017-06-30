@@ -183,4 +183,25 @@ public class EmployeeService{
 		}
 		return list;
 	}
+	
+	public int updateEmployee(Employee employee, List<Career> career, List<License> license)throws Exception{
+		EmployeeDAO employeeDao = new EmployeeDAO();
+		CareerDAO careerDao = new CareerDAO();
+		LicenseDAO licenseDao = new LicenseDAO();
+		DBConn dbConn=new DBConn();
+		Connection conn=null;
+		int success=0;
+		int employeeSuccess=0;
+		int careerSuccess=0;
+		int licenseSuccess=0;
+		try {
+			conn=dbConn.getConnection();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			if(conn!=null){try {conn.rollback();} catch (Exception e2) {}}
+			throw e;
+		}
+		return success;
+	}
 }
