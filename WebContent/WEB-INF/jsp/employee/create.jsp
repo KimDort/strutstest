@@ -48,7 +48,7 @@
 	};
 	$(document).ready(function(){
 		$("#submititem").on("click", function(){
-			if(confirm("등록하시겠습니까?")){
+			if(confirm("Would you like to register?")){
 				$("#frm").submit();
 			}else{
 				return;

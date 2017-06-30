@@ -12,14 +12,12 @@ import com.icanman.employee.service.EmployeeValidateService;
 import com.icanman.tools.SearchCriteria;
 import com.opensymphony.xwork2.Action;
 
-//Employee Base Info Register Class
-public class EmployeeCreateAction implements Action{
+public class EmployeeModifyAction implements Action{
+	private int no;
 	private EmployeeService employeeService;
 	private Employee employee;
 	private Career career;
 	private License license;
-	private List<Career> careerList;
-	private List<License> licenseList;
 	private int page;
 	private int perPageNum;
 	private SearchCriteria cri;
@@ -28,14 +26,13 @@ public class EmployeeCreateAction implements Action{
 	@Override
 	public String execute() throws Exception {
 		EmployeeValidateService vali = new EmployeeValidateService();
-		careerList = new ArrayList<>();
-		licenseList = new ArrayList<>();
-		cri=new SearchCriteria();
+		List<Career> careerList = new ArrayList<>();
+		List<License> licenseList = new ArrayList<>();
+		EmployeeService employeeService = new EmployeeService();
+		cri = new SearchCriteria();
 		cri.setPage(page);
 		cri.setPerPageNum(perPageNum);
-		
-		employeeService=new EmployeeService();
-		
+
 		if(career!=null){
 			careerList=employeeService.createList(career);
 		}
@@ -46,35 +43,27 @@ public class EmployeeCreateAction implements Action{
 		
 		val=vali.totalValidateMethod(employee, career, license);
 		if(val.getTrue()){
-			employeeService.register(employee, career, license);
+			
 			return "success";
 		}else{
 			return "input";
 		}
 	}
-	
-	public List<Career> getCareerList() {
-		return careerList;
+
+	public int getNo() {
+		return no;
 	}
 
-	public void setCareerList(List<Career> careerList) {
-		this.careerList = careerList;
+	public void setNo(int no) {
+		this.no = no;
 	}
 
-	public List<License> getLicenseList() {
-		return licenseList;
+	public EmployeeService getEmployeeService() {
+		return employeeService;
 	}
 
-	public void setLicenseList(List<License> licenseList) {
-		this.licenseList = licenseList;
-	}
-
-	public Validate getVal() {
-		return val;
-	}
-
-	public void setVal(Validate val) {
-		this.val = val;
+	public void setEmployeeService(EmployeeService employeeService) {
+		this.employeeService = employeeService;
 	}
 
 	public Employee getEmployee() {
@@ -124,4 +113,13 @@ public class EmployeeCreateAction implements Action{
 	public void setCri(SearchCriteria cri) {
 		this.cri = cri;
 	}
+
+	public Validate getVal() {
+		return val;
+	}
+
+	public void setVal(Validate val) {
+		this.val = val;
+	}
+	
 }

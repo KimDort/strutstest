@@ -1,6 +1,5 @@
 package com.icanman.employee.model;
 
-
 public class Employee {
 	private int no;
 	private String name;

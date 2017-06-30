@@ -40,7 +40,13 @@ public class CareerDAO {
 		PreparedStatement pstmt=null;
 		Career career=null;
 		try {
-			String sql="SELECT * FROM CAREER WHERE MEMBER_NO=?";
+			String sql="SELECT"
+					+ "		CAREER_NO, MEMBER_NO, CAREER_PERIOD_START,"
+					+ "		NVL(CAREER_PERIOD_END,SYSDATE)AS CAREER_PERIOD_END,"
+					+ "		CAREER_COMPANY, CAREER_RANK, CAREER_POSITION"
+					+ "	FROM "
+					+ "			CAREER "
+					+ "	WHERE MEMBER_NO=?";
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			rs=pstmt.executeQuery();

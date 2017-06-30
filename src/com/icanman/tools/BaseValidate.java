@@ -11,8 +11,13 @@ public class BaseValidate {
 	//숫자 타입인지
 	public boolean checkIntegerType(Object obj){
 		boolean checkType=false;
-		if(obj instanceof Integer){
-			checkType=true;
+		String input=String.valueOf(obj);
+		char charInput;
+		for(int idx=0;idx<input.length();idx++){
+			charInput=input.charAt(idx);
+			if(charInput >= 0x30 && charInput <= 0x39){
+				return true;
+			}
 		}
 		return checkType;
 	}
@@ -53,4 +58,5 @@ public class BaseValidate {
 		}
 		return checkLength;
 	}
+	
 }

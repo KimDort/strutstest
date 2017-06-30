@@ -14,7 +14,6 @@ import com.icanman.employee.model.License;
 import com.icanman.employee.model.Validate;
 import com.icanman.tools.DBConn;
 import com.icanman.tools.SearchCriteria;
-import com.icanman.tools.Tools;
 //Employee Service Class
 public class EmployeeService{
 	public List<Employee> list(SearchCriteria cri){
@@ -56,7 +55,7 @@ public class EmployeeService{
 				careerList=createList(career);
 				careerSuccess=careerDao.register(conn, careerList);
 			}else{
-				careerSuccess=1;
+				careerSuccess=careerDao.register(conn, inputBaseCareer(employee, careerList));
 			}
 			if(license!=null){
 				licenseList=createList(license);
@@ -78,8 +77,23 @@ public class EmployeeService{
 
 		return success;
 	}	
-	
-	public Employee readEmployee(int no){
+	public List<Career> inputBaseCareer(Employee employee, List<Career> getList)throws Exception{
+		List<Career> list=getList;
+		try {
+			Career career = new Career();
+			career.setPeriod_start(employee.getJoin());
+			career.setPeriod_end(employee.getOut().isEmpty()?"":employee.getOut());
+			career.setPeriod_company(employee.getCompany());
+			career.setPeriod_rank(employee.getRank());
+			career.setPeriod_position(employee.getPosition());
+			list.add(0, career);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return list;
+	}
+	public Employee readEmployee(int no)throws Exception{
 		EmployeeDAO employeeDao = new EmployeeDAO();
 		Employee employee=null;
 		DBConn dbConn=new DBConn();
@@ -88,8 +102,8 @@ public class EmployeeService{
 			conn=dbConn.getConnection();
 			employee=employeeDao.read(conn, no);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(conn!=null){try {conn.close();} catch (SQLException e) {e.printStackTrace();}}
 		}

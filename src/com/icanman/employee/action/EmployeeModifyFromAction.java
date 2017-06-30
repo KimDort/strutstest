@@ -1,5 +1,6 @@
 package com.icanman.employee.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.icanman.employee.model.Career;
@@ -21,12 +22,41 @@ public class EmployeeModifyFromAction implements Action{
 	@Override
 	public String execute() throws Exception {
 		EmployeeService employeeService = new EmployeeService();
+		employee = new Employee();
+		career = new ArrayList<>();
+		license = new ArrayList<>();
 		cri = new SearchCriteria();
 		cri.setPage(page);
 		cri.setPerPageNum(perPageNum);
-		
+		employee=employeeService.readEmployee(no);
+		career=employeeService.readCareer(no);
+		license=employeeService.readLicense(no);
 		
 		return "success";
+	}
+	
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public List<Career> getCareer() {
+		return career;
+	}
+
+	public void setCareer(List<Career> career) {
+		this.career = career;
+	}
+
+	public List<License> getLicense() {
+		return license;
+	}
+
+	public void setLicense(List<License> license) {
+		this.license = license;
 	}
 
 	public int getNo() {
