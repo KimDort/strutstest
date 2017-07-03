@@ -42,5 +42,14 @@
     			<param name="perPageNum">${perPageNum}</param>
     		</result>
     	</action>
+    	
+    	<action name="remove" class="com.icanman.project.action.ProjectRemoveAction">
+    		<interceptor-ref name="params"/>
+    		<result name="success" type="redirectAction">
+    			<param name="actionName">list</param>
+    			<param name="page">${page}</param>
+    			<param name="perPageNum">${perPageNum}</param>
+    		</result>
+    	</action>
     </package>
 </struts>

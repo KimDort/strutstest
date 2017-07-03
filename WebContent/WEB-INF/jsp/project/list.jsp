@@ -24,7 +24,7 @@
 	function deleteProject(boardNum){
 		if(confirm("정말 삭제하시겠습니까?")){
 			$("#no").val(boardNum);
-			$("#frm").attr("action", '${pageContext.request.contextPath }/project/delete.do');
+			$("#frm").attr("action", '${pageContext.request.contextPath }/project/remove.do');
 			$("#frm").attr("method", "post");
 			$("#frm").submit();
 		}else{
@@ -34,7 +34,7 @@
 	function modifyProject(boardNum){
 		if(confirm("수정하시겠습니까?")){
 			$("#no").val(boardNum);
-			$("#frm").attr("action", '${pageContext.request.contextPath }/project/modify.do?pno='+boardNum);
+			$("#frm").attr("action", '${pageContext.request.contextPath }/project/modify.do');
 			$("#frm").attr("method", "post");
 			$("#frm").submit();
 		}else{
@@ -147,7 +147,7 @@
 						</td>
 						<td><input type="button" class="btn btn-default" value="Add"></td>
 						<td><input type="button" class="btn btn-default" value="Modify" onclick="modifyProject(${idx.no})"></td>
-						<td><input type="button" class="btn btn-default" value="Delete" onclick="deleteMember()"></td>
+						<td><input type="button" class="btn btn-default" value="Delete" onclick="deleteProject(${idx.no})"></td>
 					</tr>		
 				</c:forEach>
 			</tbody>

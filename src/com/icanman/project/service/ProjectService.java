@@ -78,9 +78,11 @@ public class ProjectService {
 	public int delete(int pno)throws SQLException{
 		int success=0;
 		DBConn dbConn=new DBConn();
-		Connection conn=dbConn.getConnection();
+		ProjectDAO dao= new ProjectDAO();
+		Connection conn=null;
 		try {
-			
+			conn=dbConn.getConnection();
+			success=dao.delete(conn, pno);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
