@@ -19,8 +19,8 @@ public class ProjectService {
 		try {
 			list=dao.list(conn, cri);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(conn!=null){conn.close();}
 		}	
@@ -35,8 +35,8 @@ public class ProjectService {
 		try {
 			success=dao.register(conn, vo);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(conn!=null){conn.close();}
 		}
@@ -51,7 +51,8 @@ public class ProjectService {
 		try {
 			project=dao.read(conn, pno);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			throw e;
 		}finally {
 			if(conn!=null){conn.close();}
 		}
@@ -67,6 +68,7 @@ public class ProjectService {
 			success=dao.modify(conn, vo);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(conn!=null){conn.close();}
 		}
@@ -81,6 +83,7 @@ public class ProjectService {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(conn!=null){conn.close();}
 		}

@@ -15,12 +15,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath }/js/script.js"></script>
-	<script src="${pageContext.request.contextPath }/js/address.js"></script>
-	<script src="${pageContext.request.contextPath }/js/employee.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath }/js/script.js"></script>
+<script src="${pageContext.request.contextPath }/js/address.js"></script>
+<script src="${pageContext.request.contextPath }/js/employee.js"></script>
 	<script>
 	$(window).load(function(){
 		$("select[name='employee.rank']").val("${employee.rank}").prop("selected", true);

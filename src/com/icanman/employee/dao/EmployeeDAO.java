@@ -98,7 +98,7 @@ public class EmployeeDAO{
 	}
 	
 	//Read Employee 
-	public Employee read(Connection conn, int no){
+	public Employee read(Connection conn, int member_no){
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		Employee employee = null;
@@ -106,7 +106,7 @@ public class EmployeeDAO{
 			employee = new Employee();
 			String sql="SELECT * FROM EMPLOYEE WHERE MEMBER_NO = ? AND MEMBER_ISEXIT != 'Y'";
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, no);
+			pstmt.setInt(1, member_no);
 			rs=pstmt.executeQuery();
 			while(rs.next()){
 				employee.setNo(rs.getInt("MEMBER_NO"));
@@ -138,7 +138,8 @@ public class EmployeeDAO{
 		PreparedStatement pstmt=null;
 		
 		try {
-			String sql="UPDATE EMPLOYEE SET "
+			String sql="UPDATE "
+					+ "	EMPLOYEE SET "
 					+ "		MEMBER_NAME=?, MEMBER_COMPANY=?, MEMBER_IDNUMBER=?, MEMBER_ZIPCODE=?,"
 					+ "		MEMBER_ADDRESS=?, MEMBER_ADDRESS_DETAIL=?, MEMBER_RANK=?, MEMBER_JOIN=?,"
 					+ "		MEMBER_OUT=?, MEMBER_ISNEW=?, MEMBER_HAVESKILL=?, MEMBER_POSITION=?"
@@ -158,6 +159,27 @@ public class EmployeeDAO{
 			pstmt.setString(idx++, employee.getHaveskill());
 			pstmt.setString(idx++, employee.getPosition());
 			pstmt.setInt(idx++, employee.getNo());
+			success=pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		return success;
+	}
+	
+	public int deleteUpdate(Connection conn, int no)throws Exception{
+		int success=0;
+		PreparedStatement pstmt=null;
+		String sql="UPDATE "
+				+ "		EMPLOYEE SET "
+				+ "			MEMBER_ISEXIT='Y' "
+				+ "	WHERE "
+				+ "			MEMBER_NO=?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
 			success=pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

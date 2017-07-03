@@ -10,30 +10,60 @@ import java.util.List;
 import com.icanman.employee.model.License;
 
 public class LicenseDAO {
-	public int register(Connection conn, List<License> list){
+	public int register(Connection conn, List<License> list)throws Exception{
 		int success=0;
 		PreparedStatement pstmt=null;
 		String sql="INSERT INTO LICENSE VALUES((SELECT NVL(MAX(LICENSE_NO),0)+1 FROM LICENSE),"
 				+ "(EMPLOYEESEQ.CURRVAL), ?, ?, ?, ?)";
 		try {
 			pstmt=conn.prepareStatement(sql);
+			int pstmtCount=1;
 			for(int idx=0;idx<list.size();idx++){
-				pstmt.setString(1, list.get(idx).getLicense_name());
-				pstmt.setString(2, list.get(idx).getLicense_level());
-				pstmt.setString(3, list.get(idx).getLicense_date());
-				pstmt.setString(4, list.get(idx).getLicense_publisher());
+				pstmt.setString(pstmtCount++, list.get(idx).getLicense_name());
+				pstmt.setString(pstmtCount++, list.get(idx).getLicense_level());
+				pstmt.setString(pstmtCount++, list.get(idx).getLicense_date());
+				pstmt.setString(pstmtCount++, list.get(idx).getLicense_publisher());
 				success=pstmt.executeUpdate();
+				pstmtCount=1;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
 		}
 		return success;
 	}
-	
-	public List<License> read(Connection conn, int no){
+	public int register(Connection conn, List<License> list,int mno)throws Exception{
+		int success=0;
+		PreparedStatement pstmt=null;
+		String sql="INSERT INTO "
+				+ "		LICENSE "
+				+ "			VALUES((SELECT NVL(MAX(LICENSE_NO),0)+1 FROM LICENSE),"
+				+ "					?, ?, ?, ?, ?)";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			int pstmtCount=1;
+			for(int idx=0;idx<list.size();idx++){
+				pstmt.setInt(pstmtCount++, mno);
+				pstmt.setString(pstmtCount++, list.get(idx).getLicense_name());
+				pstmt.setString(pstmtCount++, list.get(idx).getLicense_level());
+				pstmt.setString(pstmtCount++, list.get(idx).getLicense_date());
+				pstmt.setString(pstmtCount++, list.get(idx).getLicense_publisher());
+				success=pstmt.executeUpdate();
+				pstmtCount=1;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		return success;
+	}
+	public List<License> read(Connection conn, int member_no)throws Exception{
 		List<License> list = new ArrayList<>();
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
@@ -41,7 +71,7 @@ public class LicenseDAO {
 		try {
 			String sql="SELECT * FROM LICENSE WHERE MEMBER_NO=?";
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, no);
+			pstmt.setInt(1, member_no);
 			rs=pstmt.executeQuery();
 			while(rs.next()){
 				license = new License();
@@ -55,9 +85,27 @@ public class LicenseDAO {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(pstmt!=null){try {pstmt.close();} catch (SQLException e) {e.printStackTrace();}}
 		}
 		return list;
+	}
+	
+	public int delete(Connection conn, int member_no)throws Exception{
+		int success=0;
+		PreparedStatement pstmt=null;
+		String sql="DELETE FROM LICENSE WHERE MEMBER_NO=?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, member_no);
+			success=pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		return success;
 	}
 }

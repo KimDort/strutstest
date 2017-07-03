@@ -2,7 +2,9 @@ package com.icanman.employee.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.icanman.employee.dao.CareerDAO;
@@ -53,10 +55,12 @@ public class EmployeeService{
 			
 			if(career!=null){
 				careerList=createList(career);
-				careerSuccess=careerDao.register(conn, careerList);
+				careerSuccess=careerDao.register(conn, inputBaseCareer(employee, careerList));
 			}else{
 				careerSuccess=careerDao.register(conn, inputBaseCareer(employee, careerList));
+				careerSuccess=1;
 			}
+			
 			if(license!=null){
 				licenseList=createList(license);
 				licenseSuccess=licenseDao.register(conn, licenseList);
@@ -149,12 +153,9 @@ public class EmployeeService{
 		String[] period_company = vo.getPeriod_company().replaceAll(" ", "").split(",",-1);
 		String[] period_position = vo.getPeriod_position().replaceAll(" ", "").split(",",-1);
 		String[] period_rank = vo.getPeriod_rank().replaceAll(" ", "").split(",",-1);
-		System.out.println("경력 리스트로 변환 : "+vo.getPeriod_start());
-		System.out.println("경력 리스트 배열 사이즈 : "+period_start.length);
 		
 		for(int idx=0; idx < period_start.length; idx++){
 			Career career = new Career();
-			System.out.println("경력 리스트 변환 중 idx : "+idx);
 			career.setPeriod_start(period_start[idx]);
 			career.setPeriod_end(period_end[idx]);
 			career.setPeriod_company(period_company[idx]);
@@ -170,11 +171,8 @@ public class EmployeeService{
 		String[] license_level=vo.getLicense_level().replaceAll(" ", "").split(",",-1);
 		String[] license_getdate=vo.getLicense_date().replaceAll(" ", "").split(",",-1);
 		String[] license_publisher=vo.getLicense_publisher().replaceAll(" ", "").split(",",-1);
-		System.out.println("자격증 리스트로 변환 : "+vo.getLicense_name());
-		System.out.println("자격증 리스트 배열 사이즈 : "+license_name.length);
 		for(int idx=0;idx<license_name.length;idx++){
 			License license = new License();
-			System.out.println("자격증 리스트 변환 중 idx : "+idx);
 			license.setLicense_name(license_name[idx]);
 			license.setLicense_level(license_level[idx]);
 			license.setLicense_date(license_getdate[idx]);
@@ -184,24 +182,111 @@ public class EmployeeService{
 		return list;
 	}
 	
-	public int updateEmployee(Employee employee, List<Career> career, List<License> license)throws Exception{
+	public int updateEmployee(Employee employee, Career career, License license)throws Exception{
 		EmployeeDAO employeeDao = new EmployeeDAO();
 		CareerDAO careerDao = new CareerDAO();
 		LicenseDAO licenseDao = new LicenseDAO();
+		List<Career> careerList=new ArrayList<>();
+		List<License> licenseList=new ArrayList<>();
 		DBConn dbConn=new DBConn();
 		Connection conn=null;
 		int success=0;
-		int employeeSuccess=0;
-		int careerSuccess=0;
-		int licenseSuccess=0;
 		try {
 			conn=dbConn.getConnection();
+			conn.setAutoCommit(false);
+			
+			employeeDao.update(conn, employee);
+			careerDao.delete(conn, employee.getNo());
+			licenseDao.delete(conn, employee.getNo());
+			if(career != null){
+				careerList=createList(career);
+				careerList=inputBaseCareer(employee, careerList);
+			}else{
+				careerList=inputBaseCareer(employee, careerList);
+			}
+			if(license!= null){
+				licenseList=createList(license);
+			}
+			
+			System.out.println("업데이트 경력 사이즈 : "+careerList.size());
+			System.out.println("업데이트 자격증 사이즈 : "+licenseList.size());
+			
+			careerDao.register(conn, careerList, employee.getNo());
+			
+			if(licenseList.size()>0){
+				licenseDao.register(conn, licenseList, employee.getNo());
+			}
+			
+				
+			conn.commit();
+			success=1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if(conn!=null){try {conn.rollback();success=0;} catch (Exception e2) {}}
+			throw e;
+		}finally {
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+		}
+		return success;
+	}
+	public List<Career> careerList()throws Exception{
+		List<Career> careerList=new ArrayList<>();
+		DBConn dbConn=new DBConn();
+		Connection conn=null;
+		CareerDAO careerDao=new CareerDAO();
+		try {
+			conn=dbConn.getConnection();
+			careerList=createTotalCareer(careerDao.list(conn));
+		} catch (Exception e) {
+			e.printStackTrace();
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+			throw e;
+		}
+		return careerList;
+	}
+	
+	public List<Career> createTotalCareer(List<Career> list)throws Exception{
+		String start="";
+		String end="";
+		long month=0;
+		try {
+			SimpleDateFormat formater=new SimpleDateFormat("yyyy-MM-dd");
+			for(int idx=0;idx<list.size()-1;idx++){
+				start=list.get(idx).getPeriod_start();
+				end=list.get(idx).getPeriod_end();
+				
+				Date startDate = formater.parse(start);
+				Date endDate = formater.parse(end);
+				
+				long startYear=startDate.getTime()/(24 * 60 * 60 * 1000);
+				long endYear = endDate.getTime()/(24 * 60 * 60 * 1000);
+				month=(endYear-startYear)/30;
+				list.get(idx).setTotalCareer((int) month);
+			}	
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			if(conn!=null){try {conn.rollback();} catch (Exception e2) {}}
 			throw e;
 		}
+		
+		return list;
+	}
+	
+	public int deleteUpdate(int no)throws Exception{
+		DBConn dbConn=new DBConn();
+		Connection conn=null;
+		EmployeeDAO employeeDao= new EmployeeDAO();
+		int success=0;
+		try {
+			conn=dbConn.getConnection();
+			success=employeeDao.deleteUpdate(conn, no);
+		} catch (Exception e) {
+			e.printStackTrace();
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+			throw e;
+		}
+		
 		return success;
 	}
 }

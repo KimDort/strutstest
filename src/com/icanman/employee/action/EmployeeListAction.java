@@ -3,7 +3,8 @@ package com.icanman.employee.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icanman.employee.model.Employee;
+import com.icanman.employee.model.Career;
+import com.icanman.employee.model.Employee;import com.icanman.employee.model.License;
 import com.icanman.employee.service.EmployeeService;
 import com.icanman.tools.SearchCriteria;
 import com.opensymphony.xwork2.Action;
@@ -12,13 +13,11 @@ import com.opensymphony.xwork2.Preparable;
 
 //Employee List Action Class
 public class EmployeeListAction implements Action, Preparable, ModelDriven{
-	
-	//Employee List Service Class
-	private EmployeeService employeeService;
 	//List Page Create Class
 	private SearchCriteria cri;
 	//Employee Info Heap List 
 	private List<Employee> list;
+	private List<Career> career;
 	
 	private int page;
 	private int perPageNum;
@@ -26,16 +25,9 @@ public class EmployeeListAction implements Action, Preparable, ModelDriven{
 	@Override
 	public String execute() throws Exception {
 		list=new ArrayList<>();
-		employeeService = new EmployeeService();
-		list=employeeService.list(cri);/*
-		Career career = new Career();
-		List<Career> carlist=new ArrayList<>();
-		career.setPeriod_start("2017-05-01");
-		career.setPeriod_end("2017-06-21");
-		carlist.add(career);
-		System.out.println(employeeService.checkJoinDate("2017-05-01", carlist));
-		System.out.println(employeeService.checkNowDate("2017-06-29"));*/
-		
+		EmployeeService employeeService = new EmployeeService();
+		list=employeeService.list(cri);
+		career=employeeService.careerList();
 		return "success";
 	}
 
@@ -52,6 +44,16 @@ public class EmployeeListAction implements Action, Preparable, ModelDriven{
 	}
 	
 	
+	public List<Career> getCareer() {
+		return career;
+	}
+
+
+	public void setCareer(List<Career> career) {
+		this.career = career;
+	}
+
+
 	public SearchCriteria getCri() {
 		return cri;
 	}

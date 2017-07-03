@@ -89,6 +89,11 @@ public class EmployeeValidateService implements Cloneable {
 					validate=checkNullLicense(licenseList);
 					return validate;
 				}
+				//자격증 취득일이 현재일보다 이후인지 체크
+				if(!checkNowDateLicense(licenseList).getTrue()){
+					validate=checkNowDateLicense(licenseList);
+					return validate;
+				}
 			}
 			
 		} catch (Exception e) {

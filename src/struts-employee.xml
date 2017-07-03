@@ -34,5 +34,23 @@
     		<interceptor-ref name="params"/>
     		<result name="success">/WEB-INF/jsp/employee/modify.jsp</result>
     	</action>
+    	<action name="modifyDone" class="com.icanman.employee.action.EmployeeModifyAction">
+    		<interceptor-ref name="params"/>
+    		<result name="input">/WEB-INF/jsp/employee/modify.jsp</result>
+    		<result name="success" type="redirectAction">
+    			<param name="actionName">list</param>
+    			<param name="page">${page}</param>
+    			<param name="perPageNum">${perPageNum}</param>
+    		</result>
+    	</action>
+    	
+    	<action name="remove" class="com.icanman.employee.action.EmployeeRemoveAction">
+    		<interceptor-ref name="params"/>
+    		<result name="success" type="redirectAction">
+    			<param name="actionName">list</param>
+    			<param name="page">${page}</param>
+    			<param name="perPageNum">${perPageNum}</param>
+    		</result>
+    	</action>
     </package>
 </struts>

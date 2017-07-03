@@ -19,8 +19,8 @@
 <script>
 	var career=new Array();
 	<c:forEach items="${career }" var="car">
-	var map={"no":"${car.no}","mno":"${car.mno}","start":"${car.period_start}","end":"${car.period_end}",
-					"company":"${car.company}", "rank":"${car.rank}","position":"${car.position}"};
+	var map={"no":"${car.period_no}","mno":"${car.member_no}","start":"${car.period_start}","end":"${car.period_end}",
+					"company":"${car.period_company}", "rank":"${car.period_rank}","position":"${car.period_position}"};
 	career.push(map);
 	</c:forEach>
 	
@@ -55,7 +55,7 @@
 	function deleteMember(no){
 		if(confirm("정말 삭제하시겠습니까?")){
 			if(confirm("삭제 하시면 되돌릴 수 없습니다.\n정말 삭제하시겠습니까?")){
-				$(location).attr('href','${pageContext.request.contextPath }/employee/remove.do?page=${cri.page}&perPageNum=${cri.perPageNum}&mno='+no);
+				$(location).attr('href','${pageContext.request.contextPath }/employee/remove.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no='+no);
 			}else{
 				
 			}
@@ -180,22 +180,27 @@
 						<a href="${pageContext.request.contextPath }/employee/read.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no=${idx.no}">${idx.name }</a>
 					</td>
 					<td align="center">
-					<c:set var="totalYear" value="0"/>
-					<c:set var="totalMonth" value="0"/>
-						<c:forEach items="${career }" var="car">
-							<c:if test="${idx.no eq car.mno }">
-								<fmt:parseNumber value="${car.period_start.time / (1000 * 60 * 60 * 24) }" integerOnly="true" var="start"/>
-								<fmt:parseNumber value="${car.period_end.time / (1000 * 60 * 60 * 24) }" integerOnly="true" var="end"/>
-								<fmt:parseNumber integerOnly="true" value="${(end - start) / 365 }" var="year" />
-								<fmt:parseNumber integerOnly="true" value="${((end - start) / 30)%12}" var="month" />
-								<c:set var="totalYear" value="${totalYear + year}"></c:set>
-								<c:set var="totalMonth" value="${totalMonth + month}"></c:set>
-								
+						<c:set var="totalCareer" value="0"/>
+						<c:forEach items="${career }" var="car" varStatus="status">
+							<c:if test="${idx.no eq car.member_no }">
+								<c:if test="${car.totalCareer > 12 }">
+									<c:set var="totalCareer" value="${totalCareer + car.totalCareer }"/>
+								</c:if>	
+								<c:if test="${car.totalCareer < 12 }">
+									<c:set var="totalCareer" value="${totalCareer + car.totalCareer }"/>
+								</c:if>
 							</c:if>
 						</c:forEach>
 						<a data-toggle="modal" data-target="#period" onclick="period(${idx.no})">
-						${totalYear > 0 ? totalYear : ""}${totalYear > 0 ? "년":""}
-						${totalMonth > 0 ? totalMonth : ""}${totalMonth > 0 ? "개월":"" }
+							<c:if test="${totalCareer > 0 }">
+								<c:if test="${totalCareer > 12}">
+								<fmt:formatNumber value="${totalCareer/12 }" pattern="0"/>년
+								<fmt:formatNumber value="${totalCareer%12 }" pattern="0"/>개월
+								</c:if>
+								<c:if test="${totalCareer < 12 }">
+									<fmt:formatNumber value="${totalCareer }" pattern="0"/>개월
+								</c:if>
+							</c:if>
 						</a>
 					</td>
 					<td align="center"><a href="#"></a></td>

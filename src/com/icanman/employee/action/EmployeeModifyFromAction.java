@@ -15,22 +15,22 @@ public class EmployeeModifyFromAction implements Action{
 	private int page;
 	private int perPageNum;
 	private Employee employee;
-	private List<Career> career;
-	private List<License> license;
+	private List<Career> careerList;
+	private List<License> licenseList;
 	private SearchCriteria cri;
 	
 	@Override
 	public String execute() throws Exception {
 		EmployeeService employeeService = new EmployeeService();
 		employee = new Employee();
-		career = new ArrayList<>();
-		license = new ArrayList<>();
+		careerList = new ArrayList<>();
+		licenseList = new ArrayList<>();
 		cri = new SearchCriteria();
 		cri.setPage(page);
 		cri.setPerPageNum(perPageNum);
 		employee=employeeService.readEmployee(no);
-		career=employeeService.readCareer(no);
-		license=employeeService.readLicense(no);
+		careerList=employeeService.readCareer(no);
+		licenseList=employeeService.readLicense(no);
 		
 		return "success";
 	}
@@ -42,21 +42,21 @@ public class EmployeeModifyFromAction implements Action{
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
-
-	public List<Career> getCareer() {
-		return career;
+	
+	public List<Career> getCareerList() {
+		return careerList;
 	}
 
-	public void setCareer(List<Career> career) {
-		this.career = career;
+	public void setCareerList(List<Career> careerList) {
+		this.careerList = careerList;
 	}
 
-	public List<License> getLicense() {
-		return license;
+	public List<License> getLicenseList() {
+		return licenseList;
 	}
 
-	public void setLicense(List<License> license) {
-		this.license = license;
+	public void setLicenseList(List<License> licenseList) {
+		this.licenseList = licenseList;
 	}
 
 	public int getNo() {

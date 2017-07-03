@@ -19,18 +19,20 @@ public class ProjectDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getContent());
-			pstmt.setString(3, vo.getStart());
-			pstmt.setString(4, vo.getEnd());
-			pstmt.setString(5, vo.getOrder_company());
-			pstmt.setString(6, vo.getCreate_skill());
-			pstmt.setString(7, vo.getEtc());
-			pstmt.setString(8, String.valueOf(vo.getIsdelete()));
+			int idx=1;
+			pstmt.setString(idx++, vo.getName());
+			pstmt.setString(idx++, vo.getContent());
+			pstmt.setString(idx++, vo.getStart());
+			pstmt.setString(idx++, vo.getEnd());
+			pstmt.setString(idx++, vo.getOrder_company());
+			pstmt.setString(idx++, vo.getCreate_skill());
+			pstmt.setString(idx++, vo.getEtc());
+			pstmt.setString(idx++, String.valueOf(vo.getIsdelete()));
 			success=pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+			throw e;
 		}
 		return success;
 	}
@@ -66,8 +68,8 @@ public class ProjectDAO {
 				list.add(vo);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
 		}
 		return list;
 	}
@@ -84,16 +86,17 @@ public class ProjectDAO {
 				project.setNo(rs.getInt("PROJECT_NO"));
 				project.setName(rs.getString("PROJECT_NAME"));
 				project.setContent(rs.getString("PROJECT_CONTENT"));
-				project.setStart(rs.getString("PROJECT_START"));
-				project.setEnd(rs.getString("PROJECT_END"));
+				project.setStart(rs.getString("PROJECT_START").substring(0,10));
+				project.setEnd(rs.getString("PROJECT_END").substring(0,10));
 				project.setOrder_company(rs.getString("PROJECT_ORDER_COMPANY"));
 				project.setCreate_skill(rs.getString("PROJECT_CREATE_SKILL"));
 				project.setEtc(rs.getString("PROJECT_ETC"));
 				project.setIsdelete(rs.getString("PROJECT_ISDELETE").charAt(0));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+			throw e;
 		}
 		
 		return project;
@@ -106,18 +109,20 @@ public class ProjectDAO {
 				+ "PROJECT_ORDER_COMPANY=?, PROJECT_CREATE_SKILL=?, PROJECT_ETC=? WHERE PROJECT_NO=?";
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getContent());
-			pstmt.setString(3, vo.getStart());
-			pstmt.setString(4, vo.getEnd());
-			pstmt.setString(5, vo.getOrder_company());
-			pstmt.setString(6, vo.getCreate_skill());
-			pstmt.setString(7, vo.getEtc());
-			pstmt.setInt(8, vo.getNo());
+			int idx=1;
+			pstmt.setString(idx++, vo.getName());
+			pstmt.setString(idx++, vo.getContent());
+			pstmt.setString(idx++, vo.getStart());
+			pstmt.setString(idx++, vo.getEnd());
+			pstmt.setString(idx++, vo.getOrder_company());
+			pstmt.setString(idx++, vo.getCreate_skill());
+			pstmt.setString(idx++, vo.getEtc());
+			pstmt.setInt(idx++, vo.getNo());
 			success=pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+			throw e;
 		}
 		return success;
 	}
@@ -133,7 +138,8 @@ public class ProjectDAO {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			if(conn!=null){conn.rollback();}
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+			throw e;
 		}
 		return success;
 	}

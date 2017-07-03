@@ -15,6 +15,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath }/js/script.js"></script>
+<script src="${pageContext.request.contextPath }/js/employee.js"></script>
 <script src="${pageContext.request.contextPath }/js/address.js"></script>
 <script src="${pageContext.request.contextPath }/js/memberValidate.js"></script>
 <link href="${pageContext.request.contextPath }/css/style.css" rel="Stylesheet" type="text/css">
@@ -37,9 +38,14 @@ function parameterInit(){
 			$("input[name='${val.focus}']").eq("${val.index}").focus();
 		}
 	}
-	<c:if test="${not empty career}">
+	<c:if test="${not empty careerList}">
 	<c:forEach items="${careerList }" var="idx" varStatus="status">
-		$("select[name='career.period_rank']").eq("${status.index}").val("${idx.period_rank}").attr("selected","selected");
+		<c:if test="${status.index eq 0}">
+		$("select[name='base_rank']").val("${idx.period_rank}").attr("selected","selected");
+		</c:if>
+		<c:if test="${status.index ne 0}">
+		$("select[name='career.period_rank']").eq(("${status.index}"*1)-1).val("${idx.period_rank}").attr("selected","selected");
+		</c:if>
 	</c:forEach>	
 	</c:if>
 };
@@ -64,12 +70,12 @@ $(document).ready(function(){
 			<div class="col-md-12 borderBox">
 			<ul class="breadcrumb">
     			<li><a href="${pageContext.request.contextPath }/main.do">Home</a></li>
-   				<li><a href="${pageContext.request.contextPath }/member/list.do?page=${cri.page}&perPageNum=${cri.perPageNum}">Member</a></li>   
+   				<li><a href="${pageContext.request.contextPath }/employee/list.do?page=${cri.page}&perPageNum=${cri.perPageNum}">Member</a></li>   
    				<li class="active">Member Create</li>     
   			</ul>
 			</div>
 			<div class="col-md-12 borderBox" >
-			<form class="form-inline" id="frm">
+			<form class="form-inline" id="frm" action="${pageContext.request.contextPath }/employee/modifyDone.do" method="post">
 			<input type="hidden" name="page" value="${cri.page }">
 			<input type="hidden" name="perPageNum" value="${cri.perPageNum }">
 			<input type="hidden" name="no" value="${employee.no }">
@@ -83,17 +89,17 @@ $(document).ready(function(){
 						<tr>
 							<th width="200px">Name</th>
 							<td>
-								<input type="text" placeholder="Please Write Name" class="form-control" name="name" id="name" value="${employee.name }">
+								<input type="text" placeholder="Please Write Name" class="form-control" name="employee.name" id="name" value="${employee.name }">
 							</td>
 							<th>Company</th>
 							<td>
-								<input type="text" name="company" class="form-control" id="company" value="${employee.company }">
+								<input type="text" name="employee.company" class="form-control" id="company" value="${employee.company }">
 							</td>
 						</tr>
 						<tr>
 							<th>Rank</th>
 							<td>
-								<select class="form-control" name="rank" id="rank">
+								<select class="form-control" name="employee.rank" id="rank">
 									<option>Chairman</option>
 									<option>Vice Chairman</option>
 									<option>CEO</option>
@@ -110,20 +116,20 @@ $(document).ready(function(){
 								</select>
 							</td>
 							<th>Position/Work</th>
-							<td><input type="text" class="form-control" id="position" name="position" value="${employee.position }"></td>
+							<td><input type="text" class="form-control" id="position" name="employee.position" value="${employee.position }"></td>
 						</tr>
 						<tr>
 							<th>
 								Join Company Date
 							</th>
 							<td>
-								<input type="text" name="joincompany" class="form-control" readonly="readonly" id="joincompany" value="${employee.join }">
+								<input type="text" name="employee.join" class="form-control" readonly="readonly" id="joincompany" value="${employee.join }">
 							</td>
 							<th>
 								Out Company Date
 							</th>
 							<td>
-								<input type="text" name="outcompany" class="form-control" readonly="readonly" id="outcompany" value="${employee.out }">
+								<input type="text" name="employee.out" class="form-control" readonly="readonly" id="outcompany" value="${employee.out }">
 							</td>
 						</tr>
 						<tr>
@@ -131,7 +137,7 @@ $(document).ready(function(){
 								Work
 							</th>
 							<td>
-								<select class="form-control" name="isnew" id="isnew">
+								<select class="form-control" name="employee.isnew" id="isnew">
 									<option value="New">New</option>
 									<option value="Career">Career</option>
 								</select>
@@ -142,7 +148,7 @@ $(document).ready(function(){
 								Have Skills
 							</th>
 							<td colspan="3">
-								<input type="text" name="haveskills" class="form-control" id="skills" placeholder="JAVA, SPRING, ..." value="${employee.haveskill }">
+								<input type="text" name="employee.haveskill" class="form-control" id="skills" placeholder="JAVA, SPRING, ..." value="${employee.haveskill }">
 							</td>
 							
 						</tr>
@@ -151,17 +157,17 @@ $(document).ready(function(){
 								ID Number
 							</th>
 							<td colspan="3">
-								<input type="text" name="idnumber1" class="form-control" maxlength="6" id="idnumber1" placeholder="123456" value="${employee.idnumber1 }">&nbsp;-
-								<input type="text" name="idnumber2" class="form-control" maxlength="7" id="idnumber2" placeholder="1234567" value="${employee.idnumber2 }">
+								<input type="text" name="employee.idnumber1" class="form-control" maxlength="6" id="idnumber1" placeholder="123456" value="${employee.idnumber1 }">&nbsp;-
+								<input type="text" name="employee.idnumber2" class="form-control" maxlength="7" id="idnumber2" placeholder="1234567" value="${employee.idnumber2 }">
 							</td>
 							
 						</tr>
 						<tr>
 							<th>Address</th>
 							<td colspan="3">
-								<input type="text" name="zipcode" id="zipcode" class="form-control" readonly="readonly" value="${employee.zipcode }">
-								<input type="text" name="address" id="address" class="form-control" readonly="readonly" value="${employee.address }">
-								<input type="text" name="address_detail" id="address_detail" class="form-control" value="${employee.address_detail }">
+								<input type="text" name="employee.zipcode" id="zipcode" class="form-control" readonly="readonly" value="${employee.zipcode }">
+								<input type="text" name="employee.address" id="address" class="form-control" readonly="readonly" value="${employee.address }">
+								<input type="text" name="employee.address_detail" id="address_detail" class="form-control" value="${employee.address_detail }">
 								<input type="button" class="btn btn-default" value="Search" onclick="address_search()" id="search">
 							</td>
 						</tr>
@@ -179,42 +185,44 @@ $(document).ready(function(){
 						</div>
 					</div>
 					<div class="row" id="period_box">
-						<c:if test="${empty career }">
+						<c:if test="${empty careerList }">
 						</c:if>
-						<c:if test="${not empty career }">
-						<c:forEach items="${career }" var="idx" varStatus="status">
+						<c:if test="${not empty careerList }">
+						<c:forEach items="${careerList }" var="idx" varStatus="status">
 						<c:if test="${status.index eq 0 }">
 							<div class="col-md-12 form-inline" id="period_line">
 							<div class="form-group">
 								<label>Period</label>
-								<input type="text" class="form-control" style="width:100px" readonly="readonly" value="${idx.period_start }">&nbsp;~
-								<input type="text" class="form-control" style="width:100px" readonly="readonly" value="${idx.period_end }">
+								<input type="text" class="form-control" style="width:100px" readonly="readonly" value="${idx.period_start }" name="base_start">&nbsp;~
+								<input type="text" class="form-control" style="width:100px" readonly="readonly" value="${idx.period_end }" name="base_end">
 							</div>
 							<div class="form-group">
 								<label>Company</label>
-								<input type="text" class="form-control" id="period_company" value="${idx.period_company }" readonly="readonly">
+								<input type="text" class="form-control" id="period_company" value="${idx.period_company }" readonly="readonly" name="base_company">
 							</div>
 							<div class="form-group">
 								<label>Rank</label>
-								<select class="form-control" id="period_rank" disabled="disabled" style="width: 150px">
-									<option>Chairman</option>
-									<option>Vice Chairman</option>
-									<option>CEO</option>
-									<option>Executive Vice President</option>
-									<option>Managing Director</option>
-									<option>Director</option>
-									<option>Deputy General Manager</option>
-									<option>Manager</option>
-									<option>Assistant Manager</option>
-									<option>Chief</option>
-									<option>Associate</option>
-									<option>Staff</option>
-									<option>Intern</option>
+								<input type="hidden" name="base_rank" value="${idx.period_rank }">
+								<select class="form-control" id="period_rank" disabled="disabled" style="width: 150px" name="base_rank">
+									<option value=""></option>
+									<option value="Chairman">Chairman</option>
+									<option value="Vice Chairman">Vice Chairman</option>
+									<option value="CEO">CEO</option>
+									<option value="Executive Vice President">Executive Vice President</option>
+									<option value="Managing Director">Managing Director</option>
+									<option value="Director">Director</option>
+									<option value="Deputy General Manager">Deputy General Manager</option>
+									<option value="Manager">Manager</option>
+									<option value="Assistant Manager">Assistant Manager</option>
+									<option value="Chief">Chief</option>
+									<option value="Associate">Associate</option>
+									<option value="Staff">Staff</option>
+									<option value="Intern">Intern</option>
 								</select>
 							</div>
 							<div class="form-group">
 								<label>Position/Work</label>
-								<input type="text" class="form-control" id="period_position" value="${idx.period_position }" readonly="readonly">
+								<input type="text" class="form-control" id="period_position" value="${idx.period_position }" readonly="readonly" name="base_position">
 							</div>
 							</div>
 						</c:if>	
@@ -222,34 +230,35 @@ $(document).ready(function(){
 							<div class="col-md-12 form-inline" id="period_line">
 							<div class="form-group">
 								<label>Period</label>
-								<input type="text" class="form-control" name="period_start"style="width:100px" readonly="readonly" value="${idx.period_start }">&nbsp;~
-								<input type="text" class="form-control" name="period_end" style="width:100px" readonly="readonly" value="${idx.period_end }">
+								<input type="text" class="form-control" name="career.period_start"style="width:100px" readonly="readonly" value="${idx.period_start }">&nbsp;~
+								<input type="text" class="form-control" name="career.period_end" style="width:100px" readonly="readonly" value="${idx.period_end }">
 							</div>
 							<div class="form-group">
 								<label>Company</label>
-								<input type="text" class="form-control" name="period_company" id="period_company" value="${idx.period_company }">
+								<input type="text" class="form-control" name="career.period_company" id="period_company" value="${idx.period_company }">
 							</div>
 							<div class="form-group">
 								<label>Rank</label>
-								<select class="form-control" id="period_rank" name="period_rank" style="width: 150px">
-									<option>Chairman</option>
-									<option>Vice Chairman</option>
-									<option>CEO</option>
-									<option>Executive Vice President</option>
-									<option>Managing Director</option>
-									<option>Director</option>
-									<option>Deputy General Manager</option>
-									<option>Manager</option>
-									<option>Assistant Manager</option>
-									<option>Chief</option>
-									<option>Associate</option>
-									<option>Staff</option>
-									<option>Intern</option>
+								<select class="form-control" id="period_rank" name="career.period_rank" style="width: 150px">
+									<option value=""></option>
+									<option value="Chairman">Chairman</option>
+									<option value="Vice Chairman">Vice Chairman</option>
+									<option value="CEO">CEO</option>
+									<option value="Executive Vice President">Executive Vice President</option>
+									<option value="Managing Director">Managing Director</option>
+									<option value="Director">Director</option>
+									<option value="Deputy General Manager">Deputy General Manager</option>
+									<option value="Manager">Manager</option>
+									<option value="Assistant Manager">Assistant Manager</option>
+									<option value="Chief">Chief</option>
+									<option value="Associate">Associate</option>
+									<option value="Staff">Staff</option>
+									<option value="Intern">Intern</option>
 								</select>
 							</div>
 							<div class="form-group">
 								<label>Position/Work</label>
-								<input type="text" class="form-control" id="period_position" value="${idx.period_position }" name="period_position">
+								<input type="text" class="form-control" id="period_position" value="${idx.period_position }" name="career.period_position">
 								<span class="btn btn-default glyphicon glyphicon-minus career-minus"></span>
 							</div>
 							</div>
@@ -270,27 +279,27 @@ $(document).ready(function(){
 						</div>
 					</div>
 					<div class="row" id="license_box">
-						<c:if test="${empty license }">
+						<c:if test="${empty licenseList }">
 						</c:if>
-						<c:if test="${not empty license }">
-						<c:forEach items="${license }" var="idx">
+						<c:if test="${not empty licenseList }">
+						<c:forEach items="${licenseList }" var="idx">
 						<div class="col-md-12 form-inline" id="license_line">
 						<input type="hidden" name="license_no" value="${idx.license_no }">
 							<div class="form-group">
 								<label>Name</label>
-								<input type="text" class="form-control" id="license_name" name="license_name" value="${idx.license_name }">
+								<input type="text" class="form-control" id="license_name" name="license.license_name" value="${idx.license_name }">
 							</div>
 							<div class="form-group">
 								<label>Level</label>
-								<input type="text" class="form-control" id="license_level" name="license_level" value="${idx.license_level }">
+								<input type="text" class="form-control" id="license_level" name="license.license_level" value="${idx.license_level }">
 							</div>
 							<div class="form-group">
 								<label>Get Date</label>
-								<input type="text" class="form-control" name="license_date" readonly="readonly" value="${idx.license_date }">
+								<input type="text" class="form-control" name="license.license_date" readonly="readonly" value="${idx.license_date }">
 							</div>
 							<div class="form-group">
 								<label>Publisher</label>
-								<input type="text" class="form-control" id="license_Publisher" name="license_Publisher" value="${idx.license_publisher }">
+								<input type="text" class="form-control" id="license_Publisher" name="license.license_publisher" value="${idx.license_publisher }">
 								<span class="btn btn-default glyphicon glyphicon-minus license-minus"></span>
 							</div>
 							</div>

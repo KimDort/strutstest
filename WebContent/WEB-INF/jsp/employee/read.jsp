@@ -27,7 +27,7 @@
 		}
 	});
 	function modifyMember(no){
-		$(location).attr("href",'${pageContext.request.contextPath }/employee/modifyForm.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no='+no);
+		$(location).attr("href",'${pageContext.request.contextPath }/employee/modify.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no='+no);
 	}
 	function deleteMember(no){
 		if(confirm("정말 삭제하시겠습니까?")){
