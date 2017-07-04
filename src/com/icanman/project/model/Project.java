@@ -10,8 +10,15 @@ public class Project {
 	private String order_company;
 	private String create_skill;
 	private String etc;
+	private int member_count;
 	private char isdelete='N';
 	
+	public int getMember_count() {
+		return member_count;
+	}
+	public void setMember_count(int member_count) {
+		this.member_count = member_count;
+	}
 	public char getIsdelete() {
 		return isdelete;
 	}

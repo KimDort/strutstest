@@ -44,8 +44,8 @@
 	function changeLink(inmemberNum,projectNum){
 		if(inmemberNum==0){
 			if(confirm("표시할 인원이 없습니다.\n인원을 추가하시겠습니까?")){
-				var str="${pageContext.request.contextPath }/projectwork/registerForm.do?"
-						+"page=${cri.page}&perPageNum=${cri.perPageNum}&project="+projectNum
+				var str="${pageContext.request.contextPath }/projectjoin/register.do?"
+						+"page=${cri.page}&perPageNum=${cri.perPageNum}&projectNum="+projectNum
 						+"&loc=${cri.location}";
 				$(location).attr("href",str);
 			}else{
@@ -53,6 +53,18 @@
 			}
 		}else{
 			
+		}
+	}
+	
+	function addMember(projectNum){
+		if(confirm("인원을 추가 하시겠습니까?")){
+			var str="${pageContext.request.contextPath }/projectjoin/register.do?"
+				+"page=${cri.page}&perPageNum=${cri.perPageNum}&projectNum="+projectNum
+				+"&loc=${cri.location}";
+				
+				$(location).attr("href",str);
+		}else{
+			return;
 		}
 	}
 </script>
@@ -73,7 +85,7 @@
 			<input type="hidden" name="no" id="no">
 			<input type="hidden" name="page" value="${cri.page }">
 			<input type="hidden" name="perPageNum" value="${cri.perPageNum }">
-			<input type="hidden" name="loc" value="project">
+			<input type="hidden" name="location" value="project">
 		</form>
 		<div class="col-md-12 borderBox" >
 		<table class="table table-default" style="width:100%;">
@@ -132,7 +144,7 @@
 								${idx.name }
 							</a>
 						</td>
-						<td align="center">0</td>
+						<td align="center">${idx.member_count }</td>
 						<td>
 							${idx.start }
 						</td>
@@ -145,7 +157,7 @@
 						<td>
 							${idx.create_skill }
 						</td>
-						<td><input type="button" class="btn btn-default" value="Add"></td>
+						<td><input type="button" class="btn btn-default" value="Add" onclick="addMember(${idx.no})"></td>
 						<td><input type="button" class="btn btn-default" value="Modify" onclick="modifyProject(${idx.no})"></td>
 						<td><input type="button" class="btn btn-default" value="Delete" onclick="deleteProject(${idx.no})"></td>
 					</tr>		

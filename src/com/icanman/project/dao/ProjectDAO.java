@@ -15,7 +15,7 @@ public class ProjectDAO {
 	public int register(Connection conn, Project vo)throws SQLException{
 		int success=0;
 		PreparedStatement pstmt=null;
-		String sql="INSERT INTO PROJECT VALUES(projectseq.nextval, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql="INSERT INTO PROJECT VALUES(PROJECTSEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -43,15 +43,17 @@ public class ProjectDAO {
 		ResultSet rs=null;
 		String sql="SELECT "
 				+ "		PROJECT_NO, PROJECT_NAME, PROJECT_CONTENT, PROJECT_START, PROJECT_END, "
-				+"		PROJECT_ORDER_COMPANY, PROJECT_CREATE_SKILL, PROJECT_ETC, PROJECT_ISDELETE "
+				+"		PROJECT_ORDER_COMPANY, PROJECT_CREATE_SKILL, PROJECT_ETC, PROJECT_ISDELETE, MEMBER_COUNT "
 				+ "	FROM "
 				+"		(SELECT "
 				+"				ROWNUM AS R, PROJECT_NO, PROJECT_NAME, PROJECT_CONTENT, PROJECT_START, "
-				+"				PROJECT_END, PROJECT_ORDER_COMPANY, PROJECT_CREATE_SKILL, PROJECT_ETC, PROJECT_ISDELETE "
+				+"				PROJECT_END, PROJECT_ORDER_COMPANY, PROJECT_CREATE_SKILL, PROJECT_ETC, PROJECT_ISDELETE, MEMBER_COUNT "
 				+ "			FROM "
 				+"			(SELECT "
 				+ "				PROJECT_NO, PROJECT_NAME, PROJECT_CONTENT, PROJECT_START, PROJECT_END, "
-				+"				PROJECT_ORDER_COMPANY, PROJECT_CREATE_SKILL, PROJECT_ETC, PROJECT_ISDELETE "
+				+"				PROJECT_ORDER_COMPANY, PROJECT_CREATE_SKILL, PROJECT_ETC, PROJECT_ISDELETE,"
+				+ "				(SELECT COUNT(*) FROM PROJECT_JOIN WHERE PROJECT_JOIN.PROJECT_NO = PROJECT.PROJECT_NO) "
+				+ "					AS MEMBER_COUNT "
 				+ "				FROM "
 				+ "				PROJECT "
 				+ "				ORDER BY PROJECT_NO DESC)"
@@ -78,14 +80,51 @@ public class ProjectDAO {
 				vo.setCreate_skill(rs.getString("PROJECT_CREATE_SKILL"));
 				vo.setEtc(rs.getString("PROJECT_ETC"));
 				vo.setIsdelete(rs.getString("PROJECT_ISDELETE").charAt(0));
+				vo.setMember_count(rs.getInt("MEMBER_COUNT"));
 				list.add(vo);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
+		}
+		finally {
 			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
 		}
 		return list;
 	}
+	public List<Project> list(Connection conn)throws SQLException{
+		List<Project> list = new ArrayList<>();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql="SELECT "
+				+"		PROJECT_NO, PROJECT_NAME, PROJECT_CONTENT, PROJECT_START, PROJECT_END, "
+				+"		PROJECT_ORDER_COMPANY, PROJECT_CREATE_SKILL, PROJECT_ETC, PROJECT_ISDELETE "
+				+"	FROM "
+				+"		PROJECT";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			
+			while(rs.next()){
+				Project vo=new Project();
+				vo.setNo(rs.getInt("PROJECT_NO"));
+				vo.setName(rs.getString("PROJECT_NAME"));
+				vo.setContent(rs.getString("PROJECT_CONTENT"));
+				vo.setStart(rs.getString("PROJECT_START").substring(0, 10));
+				vo.setEnd(rs.getString("PROJECT_END").substring(0, 10));
+				vo.setOrder_company(rs.getString("PROJECT_ORDER_COMPANY"));
+				vo.setCreate_skill(rs.getString("PROJECT_CREATE_SKILL"));
+				vo.setEtc(rs.getString("PROJECT_ETC"));
+				list.add(vo);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		return list;
+	}
+	
 	public Project read(Connection conn, int pno)throws SQLException{
 		Project project = new Project();
 		PreparedStatement pstmt=null;

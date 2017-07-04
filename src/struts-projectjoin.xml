@@ -2,7 +2,7 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" 
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-    <package name="projectjoin" namespace="/projectjoin" extends="struts-default">
+    <package name="projectjoin" namespace="/projectjoin" extends="struts-default, json-default">
     	<action name="list" class="com.icanman.projectjoin.action.ProjectJoinListAction" >
     		<interceptor-ref name="prepare"/>
     		<interceptor-ref name="modelDriven"/>
@@ -43,6 +43,14 @@
     			<param name="page">${page}</param>
     			<param name="perPageNum">${perPageNum}</param>
     		</result>
+    	</action>
+    	
+    	<action name="selectProjectInfo" class="com.icanman.project.action.ProjectSelecInfoAction">
+    		<result name="success" type="json"></result>
+    	</action>
+    	
+    	<action name="moreShowMember" class="com.icanman.project.action.MoreShowMemberAction">
+    		<result name="success" type="json"></result>
     	</action>
     </package>
 </struts>

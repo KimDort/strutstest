@@ -26,7 +26,21 @@ public class ProjectService {
 		}	
 		return list;
 	}
-	
+	public List<Project> list()throws SQLException{
+		DBConn dbConn=new DBConn();
+		Connection conn=dbConn.getConnection();
+		ProjectDAO dao=new ProjectDAO(); 
+		List<Project> list = new ArrayList<>();
+		try {
+			list=dao.list(conn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(conn!=null){conn.close();}
+		}	
+		return list;
+	}
 	public int register(Project vo)throws SQLException{
 		int success=0;
 		DBConn dbConn=new DBConn();

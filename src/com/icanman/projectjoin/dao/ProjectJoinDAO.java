@@ -16,31 +16,43 @@ public class ProjectJoinDAO {
 		ResultSet rs=null;
 		List<ProjectJoin> list = new ArrayList<>();
 		
-		String sql="SELECT JOIN_NO, PROJECT_NO, MEMBER_NO, JOIN_POSITION, JOIN_IN, JOIN_OUT, PROJECT_NAME, EMPLOYEE, R FROM "
-					+"(SELECT JOIN_NO, PROJECT_NO, MEMBER_NO, JOIN_POSITION, JOIN_IN, JOIN_OUT, PROJECT_NAME, EMPLOYEE,ROWNUM AS R FROM "
-					+"(SELECT JOIN_NO, PROJECT_NO, MEMBER_NO, JOIN_POSITION, JOIN_IN, JOIN_OUT, "
-					+"(SELECT PROJECT_NAME FROM PROJECT WHERE PROJECT.PROJECT_NO = PROJECT_JOIN.PROJECT_NO)AS PROJECT_NAME,"
-					+"(SELECT MEMBER_NAME FROM EMPLOYEE WHERE MEMBER_NO=PROJECT_JOIN.MEMBER_NO)AS EMPLOYEE FROM PROJECT_JOIN ORDER BY JOIN_NO))"
-					+"WHERE R >= ? AND R <= ?";
+		String sql="SELECT "
+				+"		JOIN_NO, PROJECT_NO, MEMBER_NO, JOIN_POSITION, JOIN_IN, JOIN_OUT, PROJECT_NAME, EMPLOYEE, R "
+				+"	FROM "
+				+"		(SELECT "
+				+"			JOIN_NO, PROJECT_NO, MEMBER_NO, JOIN_POSITION, JOIN_IN, JOIN_OUT, PROJECT_NAME, EMPLOYEE, ROWNUM AS R "
+				+"		FROM "
+				+"			("
+				+"			SELECT JOIN_NO, PROJECT_NO, MEMBER_NO, JOIN_POSITION, JOIN_IN, JOIN_OUT, "
+				+"				(SELECT PROJECT_NAME FROM PROJECT WHERE PROJECT.PROJECT_NO = PROJECT_JOIN.PROJECT_NO)AS PROJECT_NAME,"
+				+"				(SELECT MEMBER_NAME FROM EMPLOYEE WHERE MEMBER_NO=PROJECT_JOIN.MEMBER_NO)AS EMPLOYEE "
+				+"			FROM PROJECT_JOIN ORDER BY JOIN_NO"
+				+"			)"
+				+"		)"
+				+"	WHERE R >= ? "
+				+"	AND R <= ?";
 		try {
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1, cri.getPageStart());
 			pstmt.setInt(2, cri.getPerPageNum());
 			rs=pstmt.executeQuery();
-			for(int idx=0;rs.next();idx++){
+			while(rs.next()){
 				ProjectJoin vo = new ProjectJoin();
-				/*vo.setNo(rs.getInt("JOIN_NO"));
-				vo.setMno(mnoArray);
-				vo.setPno(pnoArray);
-				vo.setPosition(positionArray);
-				vo.setJoin(joinArray);
-				vo.setOut(outArray);
-				vo.setMember(memberArray);
-				vo.setProject(projectArray);*/
+				vo.setNo(rs.getInt("JOIN_NO"));
+				vo.setMno(rs.getInt("MEMBER_NO"));
+				vo.setPno(rs.getInt("PROJECT_NO"));
+				vo.setPosition(rs.getString("JOIN_POSITION"));
+				vo.setJoin(rs.getString("JOIN_IN").substring(0, 10));
+				vo.setOut(rs.getString("JOIN_OUT").substring(0, 10));
+				vo.setName(rs.getString("PROJECT_NAME"));
+				vo.setMember(rs.getString("EMPLOYEE"));
 				list.add(vo);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
 		}
 		return list;
 	}
@@ -60,9 +72,10 @@ public class ProjectJoinDAO {
 				success=pstmt.executeUpdate();
 			}*/
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			success=0;
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
 		}
 		
 		return success;

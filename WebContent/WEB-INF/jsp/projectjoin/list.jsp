@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,14 +94,8 @@
 					<th width="80px">Position</th>
 					<th width="100px">Join Day</th>
 					<th width="100px">Out Day</th>
-					<c:choose>
-						<c:when test="${sessionScope.loginUser.id ne 'admin'}">
-						</c:when>
-						<c:when test="${sessionScope.loginUser.id eq 'admin'}">
-							<th width="100px">Modify</th>
-							<th width="100px" align="right">Delete</th>
-						</c:when>
-					</c:choose>
+					<th width="100px">Modify</th>
+					<th width="100px" align="right">Delete</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -115,30 +111,18 @@
 						<td>${idx.name eq list[status.index+1].name ?'':idx.name}</td>
 						<td><a href="#" onclick="userInfo(${idx.mno})"
 						data-toggle="modal" data-target="#userInfoModal">${idx.member }</a></td>
-						<td>${idx.position[status.idx]}</td>
-						<td>${idx.joinday }</td>
-						<td>${idx.outday }</td>
-						<c:choose>
-						<c:when test="${sessionScope.loginUser.id ne 'admin'}">
-						</c:when>
-						<c:when test="${sessionScope.loginUser.id eq 'admin'}">
-							<td><input type="button" class="btn btn-default" value="Modify"></td>
-							<td><input type="button" class="btn btn-default" value="Delete" onclick="deleteMember()"></td>
-						</c:when>
-						</c:choose>
+						<td>${idx.position}</td>
+						<td>${idx.join }</td>
+						<td>${idx.out }</td>
+						<td><input type="button" class="btn btn-default" value="Modify"></td>
+						<td><input type="button" class="btn btn-default" value="Delete" onclick="deleteMember()"></td>
 					</tr>		
-				</c:forEach>			
-			<c:choose>
-				<c:when test="${sessionScope.loginUser.id ne 'admin'}">
-				</c:when>
-				<c:when test="${sessionScope.loginUser.id eq 'admin'}">
-						<tr>
-							<td colspan="12" align="right">
-								<input type="button" class="btn btn-default" value="Add Member" onclick="createItem()">
-							</td>
-						</tr>
-				</c:when>
-			</c:choose>	
+				</c:forEach>		
+				<tr>
+					<td colspan="12" align="right">
+						<input type="button" class="btn btn-default" value="Add Member" onclick="createItem()">
+					</td>
+				</tr>
 			</tbody>
 			<tfoot>				
 				<tr align="center">

@@ -18,7 +18,7 @@ import com.icanman.tools.DBConn;
 import com.icanman.tools.SearchCriteria;
 //Employee Service Class
 public class EmployeeService{
-	public List<Employee> list(SearchCriteria cri){
+	public List<Employee> list(SearchCriteria cri)throws Exception{
 		DBConn dbConn=new DBConn();
 		List<Employee> list=new ArrayList<>();
 		EmployeeDAO dao=new EmployeeDAO();	
@@ -28,12 +28,28 @@ public class EmployeeService{
 			list=dao.list(conn, cri);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
 		}
 		return list;
 	}
-	
+	public List<Employee> list()throws Exception{
+		DBConn dbConn=new DBConn();
+		List<Employee> list=new ArrayList<>();
+		EmployeeDAO dao=new EmployeeDAO();	
+		Connection conn =null;
+		try {
+			conn = dbConn.getConnection();
+			list=dao.list(conn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+		}
+		return list;
+	}
 	public int register(Employee employee, Career career, License license){
 		EmployeeDAO employeeDao = new EmployeeDAO();
 		CareerDAO careerDao = new CareerDAO();
@@ -197,7 +213,6 @@ public class EmployeeService{
 			
 			employeeDao.update(conn, employee);
 			careerDao.delete(conn, employee.getNo());
-			licenseDao.delete(conn, employee.getNo());
 			if(career != null){
 				careerList=createList(career);
 				careerList=inputBaseCareer(employee, careerList);
@@ -214,10 +229,10 @@ public class EmployeeService{
 			careerDao.register(conn, careerList, employee.getNo());
 			
 			if(licenseList.size()>0){
+				licenseDao.delete(conn, employee.getNo());
 				licenseDao.register(conn, licenseList, employee.getNo());
 			}
-			
-				
+					
 			conn.commit();
 			success=1;
 		} catch (SQLException e) {
@@ -251,7 +266,7 @@ public class EmployeeService{
 		long month=0;
 		try {
 			SimpleDateFormat formater=new SimpleDateFormat("yyyy-MM-dd");
-			for(int idx=0;idx<list.size()-1;idx++){
+			for(int idx=0;idx<list.size();idx++){
 				start=list.get(idx).getPeriod_start();
 				end=list.get(idx).getPeriod_end();
 				
@@ -283,10 +298,47 @@ public class EmployeeService{
 			success=employeeDao.deleteUpdate(conn, no);
 		} catch (Exception e) {
 			e.printStackTrace();
-			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
 			throw e;
+		}finally {
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
 		}
 		
 		return success;
+	}
+	public List<Employee> showMoreEmplyee(int startNum ,int endNum)throws Exception{
+		DBConn dbConn=new DBConn();
+		Connection conn=null;
+		EmployeeDAO dao= new EmployeeDAO();
+		List<Employee> list = new ArrayList<>();
+		try {
+			conn=dbConn.getConnection();
+			list=dao.showMoreEmplyee(conn, startNum, endNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+		}
+		
+		return list;
+	}
+	
+	public List<Career> showMoreEmployeeCareer(List<Employee> employeeList)throws Exception{
+		DBConn dbConn=new DBConn();
+		Connection conn=null;
+		CareerDAO dao = new CareerDAO();
+		List<Career> list=new ArrayList<>();
+		try {
+			conn=dbConn.getConnection();
+			list=dao.showMoreEmployeeCareer(conn, employeeList);
+			list=createTotalCareer(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+		}
+		
+		return list;
 	}
 }

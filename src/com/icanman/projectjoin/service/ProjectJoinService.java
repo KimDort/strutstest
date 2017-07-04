@@ -19,8 +19,8 @@ public class ProjectJoinService {
 		try {
 			list=dao.list(conn, cri);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(conn!=null){conn.close();}
 		}

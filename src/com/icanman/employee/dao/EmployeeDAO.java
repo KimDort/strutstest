@@ -14,22 +14,34 @@ import com.icanman.tools.SearchCriteria;
 public class EmployeeDAO{
 	
 	//Employee Get List Method
-	public List<Employee> list(Connection conn, SearchCriteria cri){
+	public List<Employee> list(Connection conn, SearchCriteria cri)throws Exception{
 		List<Employee> list = new ArrayList<>();
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		String sql="SELECT * FROM (SELECT ROWNUM AS R,"
-					+"MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
-					+"MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
-					+"MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW,"
-					+"PROJECT_HISTORY,  MEMBER_HAVESKILL, MEMBER_ISEXIT "
-					+"FROM (SELECT MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
-					+"MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
-					+"MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW," 
-					+"(SELECT COUNT(*) FROM PROJECT_JOIN WHERE PROJECT_JOIN.MEMBER_NO=EMPLOYEE.MEMBER_NO) AS PROJECT_HISTORY,"
-					+" MEMBER_HAVESKILL, MEMBER_ISEXIT "
-					+"FROM EMPLOYEE ORDER BY MEMBER_NO DESC"
-					+"))WHERE R >= ? AND R <= ? AND MEMBER_ISEXIT = 'N' ";
+		String sql="SELECT "
+				+ "		R, MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
+				+"		MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
+				+"		MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW,"
+				+"		PROJECT_HISTORY,  MEMBER_HAVESKILL, MEMBER_ISEXIT "
+				+"		FROM "
+				+"		(SELECT ROWNUM AS R,"
+				+"			MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
+				+"			MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
+				+"			MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW,"
+				+"			PROJECT_HISTORY,  MEMBER_HAVESKILL, MEMBER_ISEXIT "
+				+"			FROM "
+				+"				(SELECT MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
+				+"					MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
+				+"					MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW," 
+				+"					(SELECT COUNT(*) FROM PROJECT_JOIN WHERE PROJECT_JOIN.MEMBER_NO=EMPLOYEE.MEMBER_NO) "
+				+ "					AS PROJECT_HISTORY, MEMBER_HAVESKILL, MEMBER_ISEXIT "
+				+"				FROM "
+				+ "					EMPLOYEE "
+				+ "					ORDER BY MEMBER_NO DESC)"
+				+ "		)"
+				+ "	WHERE R >= ? "
+				+ "	AND R <= ? "
+				+ "	AND MEMBER_ISEXIT = 'N' ";
 			try {
 				pstmt=conn.prepareStatement(sql);
 				int idx=1;
@@ -47,7 +59,7 @@ public class EmployeeDAO{
 					vo.setAddress(rs.getString("MEMBER_ADDRESS"));
 					vo.setAddress_detail(rs.getString("MEMBER_ADDRESS_DETAIL"));
 					vo.setRank(rs.getString("MEMBER_RANK"));
-					vo.setJoin(rs.getString("MEMBER_JOIN"));
+					vo.setJoin(rs.getString("MEMBER_JOIN").substring(0, 10));
 					vo.setOut(rs.getString("MEMBER_OUT"));
 					vo.setIsnew(rs.getString("MEMBER_ISNEW"));
 					vo.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
@@ -56,15 +68,70 @@ public class EmployeeDAO{
 					list.add(vo);
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
+				throw e;
 			}finally {
 				if(rs!=null){try {rs.close();} catch (Exception e2) {}}
 				if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
 			}
 		return list;
 	}
-	
+	//Employee Get List Method
+		public List<Employee> list(Connection conn)throws Exception{
+			List<Employee> list = new ArrayList<>();
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			String sql="SELECT * "
+					+"		FROM "
+					+"		(SELECT ROWNUM AS R,"
+					+"			MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
+					+"			MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
+					+"			MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW,"
+					+"			PROJECT_HISTORY,  MEMBER_HAVESKILL, MEMBER_ISEXIT "
+					+"			FROM "
+					+"				(SELECT MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
+					+"					MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
+					+"					MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW," 
+					+"					(SELECT COUNT(*) FROM PROJECT_JOIN WHERE PROJECT_JOIN.MEMBER_NO=EMPLOYEE.MEMBER_NO) "
+					+"					AS PROJECT_HISTORY, MEMBER_HAVESKILL, MEMBER_ISEXIT "
+					+"				FROM "
+					+"					EMPLOYEE "
+					+"					ORDER BY MEMBER_NAME ASC)"
+					+"		)"
+					+ "		WHERE R >=1 "
+					+ "		AND R <= 5";
+				try {
+					pstmt=conn.prepareStatement(sql);
+					rs=pstmt.executeQuery();
+					while(rs.next()){
+						Employee vo = new Employee();
+						vo.setNo(rs.getInt("MEMBER_NO"));
+						vo.setName(rs.getString("MEMBER_NAME"));
+						vo.setCompany(rs.getString("MEMBER_COMPANY"));
+						vo.setIdnumber1(rs.getString("MEMBER_IDNUMBER").split("-")[0]);					
+						vo.setIdnumber2(rs.getString("MEMBER_IDNUMBER").split("-")[1]);
+						vo.setZipcode(rs.getString("MEMBER_ZIPCODE"));
+						vo.setAddress(rs.getString("MEMBER_ADDRESS"));
+						vo.setAddress_detail(rs.getString("MEMBER_ADDRESS_DETAIL"));
+						vo.setRank(rs.getString("MEMBER_RANK"));
+						vo.setJoin(rs.getString("MEMBER_JOIN").substring(0, 10));
+						vo.setOut(rs.getString("MEMBER_OUT"));
+						vo.setIsnew(rs.getString("MEMBER_ISNEW"));
+						vo.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
+						vo.setProjecthistory(rs.getInt("PROJECT_HISTORY"));
+						vo.setIsexit(rs.getString("MEMBER_ISEXIT").charAt(0));
+						vo.setRowNum(rs.getInt("R"));
+						list.add(vo);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw e;
+				}finally {
+					if(rs!=null){try {rs.close();} catch (Exception e2) {}}
+					if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+				}
+			return list;
+		}
 	//Employee DB Insert Method
 	public int register(Connection conn, Employee vo){
 		int success=0;
@@ -153,7 +220,7 @@ public class EmployeeDAO{
 			pstmt.setString(idx++, employee.getAddress());
 			pstmt.setString(idx++, employee.getAddress_detail());
 			pstmt.setString(idx++, employee.getRank());
-			pstmt.setString(idx++, employee.getJoin());
+			pstmt.setString(idx++, employee.getJoin().substring(0, 10));
 			pstmt.setString(idx++, employee.getOut());
 			pstmt.setString(idx++, employee.getIsnew());
 			pstmt.setString(idx++, employee.getHaveskill());
@@ -188,5 +255,68 @@ public class EmployeeDAO{
 			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
 		}
 		return success;
+	}
+	
+	public List<Employee> showMoreEmplyee(Connection conn,int startNum ,int endNum)throws Exception{
+		List<Employee> list = new ArrayList<>();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql="SELECT "
+				+ "		R, MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
+				+"		MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
+				+"		MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW,"
+				+"		PROJECT_HISTORY,  MEMBER_HAVESKILL, MEMBER_ISEXIT "
+				+"		FROM "
+				+"		(SELECT ROWNUM AS R,"
+				+"			MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
+				+"			MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
+				+"			MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW,"
+				+"			PROJECT_HISTORY,  MEMBER_HAVESKILL, MEMBER_ISEXIT "
+				+"			FROM "
+				+"				(SELECT MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
+				+"					MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
+				+"					MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW," 
+				+"					(SELECT COUNT(*) FROM PROJECT_JOIN WHERE PROJECT_JOIN.MEMBER_NO=EMPLOYEE.MEMBER_NO) "
+				+ "					AS PROJECT_HISTORY, MEMBER_HAVESKILL, MEMBER_ISEXIT "
+				+"				FROM "
+				+ "					EMPLOYEE "
+				+ "					ORDER BY MEMBER_NAME ASC)"
+				+ "		)"
+				+ "	WHERE R >= ? "
+				+ "	AND R <= ? "
+				+ "	AND MEMBER_ISEXIT = 'N' ";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			int idx=1;
+			pstmt.setInt(idx++, startNum);
+			pstmt.setInt(idx++, endNum);
+			rs=pstmt.executeQuery();
+			while(rs.next()){
+				Employee vo = new Employee();
+				vo.setNo(rs.getInt("MEMBER_NO"));
+				vo.setName(rs.getString("MEMBER_NAME"));
+				vo.setCompany(rs.getString("MEMBER_COMPANY"));
+				vo.setIdnumber1(rs.getString("MEMBER_IDNUMBER").split("-")[0]);
+				vo.setIdnumber2(rs.getString("MEMBER_IDNUMBER").split("-")[1]);
+				vo.setZipcode(rs.getString("MEMBER_ZIPCODE"));
+				vo.setAddress(rs.getString("MEMBER_ADDRESS"));
+				vo.setAddress_detail(rs.getString("MEMBER_ADDRESS_DETAIL"));
+				vo.setRank(rs.getString("MEMBER_RANK"));
+				vo.setJoin(rs.getString("MEMBER_JOIN").substring(0, 10));
+				vo.setOut(rs.getString("MEMBER_OUT"));
+				vo.setIsnew(rs.getString("MEMBER_ISNEW"));
+				vo.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
+				vo.setProjecthistory(rs.getInt("PROJECT_HISTORY"));
+				vo.setIsexit(rs.getString("MEMBER_ISEXIT").charAt(0));
+				vo.setRowNum(rs.getInt("R"));
+				list.add(vo);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		return list;
 	}
 }

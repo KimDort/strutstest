@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.icanman.employee.model.Career;
+import com.icanman.employee.model.Employee;
 
 public class CareerDAO {
 	public int register(Connection conn, List<Career> list){
@@ -143,5 +144,43 @@ public class CareerDAO {
 			}
 		}
 		return success;
+	}
+	
+	public List<Career> showMoreEmployeeCareer(Connection conn, List<Employee> employeeList)throws Exception{
+		List<Career> list= new ArrayList<>();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql="SELECT "
+				+ "		CAREER_NO, MEMBER_NO, CAREER_PERIOD_START, NVL(CAREER_PERIOD_END,SYSDATE)AS CAREER_PERIOD_END, "
+				+ "		CAREER_COMPANY, CAREER_RANK, CAREER_POSITION "
+				+ "	FROM CAREER"
+				+ "	WHERE MEMBER_NO=?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			int pstmtCount=1;
+			for(int idx=0;idx<employeeList.size();idx++){
+				pstmt.setInt(pstmtCount++, employeeList.get(idx).getNo());
+				rs=pstmt.executeQuery();
+				while(rs.next()){
+					Career career = new Career();
+					career.setMember_no(rs.getInt("MEMBER_NO"));
+					career.setPeriod_company(rs.getString("CAREER_COMPANY"));
+					career.setPeriod_start(rs.getString("CAREER_PERIOD_START").substring(0, 10));
+					career.setPeriod_end(rs.getString("CAREER_PERIOD_END").substring(0, 10));
+					career.setPeriod_no(rs.getInt("CAREER_NO"));
+					career.setPeriod_position(rs.getString("CAREER_POSITION"));
+					career.setPeriod_rank(rs.getString("CAREER_RANK"));
+					list.add(career);
+				}
+				pstmtCount=1;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}
+			}
+		}
+		return list;
 	}
 }
