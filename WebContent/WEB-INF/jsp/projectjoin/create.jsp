@@ -82,7 +82,12 @@ function getShowMoreEmployee(){
 				str+="<td>"
 				for(var crd=0;crd<this.careerList.length;crd++){
 					if(this.employeeList[idx].no==this.careerList[crd].member_no){
-						str+=parseInt(this.careerList[crd].totalCareer);;
+						if(this.careerList[crd].totalCareer > 12){
+							str+=this.careerList[crd].totalCareer/12+"년"
+						}
+						if(this.careerList[crd].totalCareer < 12){
+							str+=this.careerList[crd].totalCareer+"개월"
+						}
 					}
 				}
 				str+="</td>"
