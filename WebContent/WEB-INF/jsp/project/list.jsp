@@ -46,7 +46,7 @@
 			if(confirm("표시할 인원이 없습니다.\n인원을 추가하시겠습니까?")){
 				var str="${pageContext.request.contextPath }/projectjoin/register.do?"
 						+"page=${cri.page}&perPageNum=${cri.perPageNum}&projectNum="+projectNum
-						+"&loc=${cri.location}";
+						+"&location=project";
 				$(location).attr("href",str);
 			}else{
 				
@@ -60,7 +60,7 @@
 		if(confirm("인원을 추가 하시겠습니까?")){
 			var str="${pageContext.request.contextPath }/projectjoin/register.do?"
 				+"page=${cri.page}&perPageNum=${cri.perPageNum}&projectNum="+projectNum
-				+"&loc=${cri.location}";
+				+"&location=project";
 				
 				$(location).attr("href",str);
 		}else{

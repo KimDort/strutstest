@@ -18,8 +18,8 @@
 <link href="${pageContext.request.contextPath }/css/style.css" rel="Stylesheet" type="text/css">
 <script>
 	function createItem(){
-		var str="${pageContext.request.contextPath }/projectwork/registerForm.do"
-				+"?page=${cri.page}&perPageNum=${cri.perPageNum}&loc=${cri.location}";
+		var str="${pageContext.request.contextPath }/projectjoin/register.do"
+				+"?page=${cri.page}&perPageNum=${cri.perPageNum}&location=projectjoin";
 		$(location).attr("href",str);
 	};
 	function deleteProject(ProjectNum){

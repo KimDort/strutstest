@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -21,6 +20,7 @@
 <title>Insert title here</title>
 <script>
 var career=new Array();
+var callMethodCount=0;
 <c:forEach items="${career }" var="car">
 var map={"no":"${car.period_no}","mno":"${car.member_no}","start":"${car.period_start}","end":"${car.period_end}",
 				"company":"${car.period_company}", "rank":"${car.period_rank}","position":"${car.period_position}"};
@@ -49,9 +49,19 @@ function period(no){
 	$("#period_modal_body").append(str);	
 }
 function addMember(){
-	$("#frm").attr("action","${pageContext.request.contextPath }/projectjoin/register.do");
+	$("#frm").attr("action","${pageContext.request.contextPath }/projectjoin/registerDone.do");
 	$("#frm").attr("method", "POST");
-	$("#frm").submit();
+	if(confirm("사원들을 등록하시겠습니까?")){
+		if($("input:checkbox[name='member_no']:checked").length<=0){
+			alert("사원을 한명 이상 선택해 주십시오.");
+			return;
+		}else{
+			$("#frm").submit();
+		}
+	}else{
+		return;
+	}
+	
 }
 function getProjectInfo(){
 	jsonUrl="${pageContext.request.contextPath }/projectjoin/selectProjectInfo.do?projectSelectNum="+$("#selectProject option:selected").val();
@@ -67,7 +77,7 @@ function getProjectInfo(){
 		});
 	});
 }
-function getShowMoreEmployee(){
+function getShowMoreEmployee(checkNum){
 	var startNum=$("#lastNum").val();
 	startNum=parseInt(startNum);
 	jsonUrl="${pageContext.request.contextPath }/projectjoin/moreShowMember.do?startNum="+(startNum+1)+"&endNum="+(startNum+5);
@@ -76,46 +86,65 @@ function getShowMoreEmployee(){
 		$(date).each(function(){
 			for(var idx=0;idx<this.employeeList.length;idx++){
 				var skillSplit=this.employeeList[idx].haveskill.split(",");
+				var totalCareer=0;
 				str="<tr>"
-				str+="<td><input type='checkbox' class='checkbox' value='"+this.employeeList[idx].no+"' name='member_no'></td>"
+				str+="<td>"
+				str+="<input type='checkbox' class='checkbox' value='"+this.employeeList[idx].no+"' name='member_no'>"
+				str+=""
 				str+="<td>"+this.employeeList[idx].name+"</td>"
 				str+="<td>"
+				str+="<a data-toggle='modal' data-target='#period' onclick='period("+this.employeeList[idx].no+")'>"
 				for(var crd=0;crd<this.careerList.length;crd++){
 					if(this.employeeList[idx].no==this.careerList[crd].member_no){
-						if(this.careerList[crd].totalCareer > 12){
-							str+=this.careerList[crd].totalCareer/12+"년"
+						totalCareer = parseInt(this.careerList[crd].totalCareer);
+						if(totalCareer > 0){
+							if(totalCareer > 12){					
+								str +=  totalCareer / 12 + "년"
+								str +=  totalCareer % 12 + "개월"
+							}
+							if(totalCareer < 12){
+								str += totalCareer + "개월"
+							}
 						}
-						if(this.careerList[crd].totalCareer < 12){
-							str+=this.careerList[crd].totalCareer+"개월"
-						}
+						
 					}
 				}
-				str+="</td>"
+				
+				str+="</a></td>"
 				str+="<td><select class='form-control' id='skills'>"
 				for(var skd=0;skd<skillSplit.length;skd++){
 					str+="<option>"+skillSplit[skd]+"</option>"
 				}
 				str+="</select></td>"
-				str+="<td><input type='text' class='form-control' name='position'></td>"
-				str+="<td><input type='text' class='form-control' name='join' readonly='readonly'></td>"
-				str+="<td><input type='text' class='form-control' name='out' readonly='readonly'></td>"
+				str+="<td><input type='text' class='form-control' name='position' disabled='disabled'></td>"
+				str+="<td><input type='text' class='form-control' name='join' readonly='readonly' disabled='disabled'></td>"
+				str+="<td><input type='text' class='form-control' name='out' readonly='readonly' disabled='disabled'></td>"
 				str+="</tr>"
 				$(".employeeTableList").append(str);
 				setDatePicketInit();
 				if(idx==this.employeeList.length-1){
 					$("#lastNum").val(this.employeeList[this.employeeList.length-1].rowNum);
 				}
+				if(checkNum!=null){
+					for(var checkN=0;checkN<checkNum.length;checkN++){
+						if(checkNum[checkN]==this.employeeList[idx].no){
+							$("input:checkbox[name='member_no'][value='"+checkNum[checkN]+"']").attr("checked","checked");
+							$("input:checkbox[name='member_no'][value='"+checkNum[checkN]+"']")
+								.parent("td").next().next().next().next().children().prop("disabled", false);
+							$("input:checkbox[name='member_no'][value='"+checkNum[checkN]+"']")
+								.parent("td").next().next().next().next().next().children().prop("disabled", false);
+							$("input:checkbox[name='member_no'][value='"+checkNum[checkN]+"']")
+								.parent("td").next().next().next().next().next().next().children().prop("disabled", false);
+						}
+					}
+				}
 			}
 		});
+		callMethodCount++;
+		$("#callMemberList").val(callMethodCount);
 	});
 }
-$(document).ready(function(){
-	getProjectInfo();
-	$("#selectProject").on("change", function(){
-		getProjectInfo();
-	});
-	setDatePicketInit();
-});
+
 function setDatePicketInit(){
 	$("input[name='join']").datepicker({
 		dateFormat:'yy-mm-dd',
@@ -129,17 +158,114 @@ function setDatePicketInit(){
         changeYear: true,
         nextText: '다음 달',
         prevText: '이전 달' });
-	$("#changeProject").on("click", function(){
-		if(confirm("현재 선택된 프로젝트 이외의 프로젝트를 선택하시겠습니까?")){
-			$("#selectProject").prop("disabled", false);
-		}else{
-			return;
-		}
-	});
 }
 </script>
+<script>
+	$(document).ready(function(){
+		getProjectInfo();
+		$("#selectProject").on("change", function(){
+			getProjectInfo();
+		});
+		
+		if($("#selectProject").is(":disabled")){
+			$("#changeProject").on("click", function(){
+				if(confirm("다른 프로젝트를 선택하시겠습니까?")){
+					$("#selectProject").removeAttr("disabled");
+					return;
+				}else{
+					return;
+				}
+			});
+		}
+		
+		if($("#location").val()=="projectjoin"){
+			$("#selectProject").removeAttr("disabled");
+		}else{
+			$("#selectProject").attr("disabled", "disabled");
+		}
+		
+		if("${val.message}"!=""){
+			alert("${val.message}");
+			var memberNum= new Array();
+			var positionText = new Array();
+			var startDate = new Array();
+			var endDate = new Array();
+			
+			<c:forEach items="${member_no }" var="idx">
+				memberNum.push("${idx}");
+			</c:forEach>
+			<c:forEach items="${position }" var="idx">
+				positionText.push("${idx}");
+			</c:forEach>
+			<c:forEach items="${join }" var="idx">
+				startDate.push("${idx}");
+			</c:forEach>
+			<c:forEach items="${out }" var="idx">
+				endDate.push("${idx}");
+			</c:forEach>
+			for(var idx=0;idx<"${callMemberList}";idx++){
+				getShowMoreEmployee(memberNum);
+			}
+			
+			for(var idx=0;idx<"${fn:length(member_no)}";idx++){
+				//체크된 값 받아서 체크하기
+				$("input:checkbox[name='member_no'][value='"+memberNum[idx]+"']").attr("checked","checked");
+				//역할 및 직무 값 받아서 입력하기
+				$("input:checkbox[name='member_no'][value='"+memberNum[idx]+"']")
+				.parent().next().next().next().next().children("input").val(positionText[idx]);	
+				//시작일 값 받아서 입력하기
+				$("input:checkbox[name='member_no'][value='"+memberNum[idx]+"']")
+				.parent().next().next().next().next().next().children("input").val(startDate[idx]);	
+				//종료일 값 받아서 입력하기
+				$("input:checkbox[name='member_no'][value='"+memberNum[idx]+"']")
+				.parent().next().next().next().next().next().next().children("input").val(endDate[idx]);
+				//체크된 멤버 disable 해제
+				$("input:checkbox[name='member_no'][value='"+memberNum[idx]+"']")
+					.parent("td").next().next().next().next().children().prop("disabled", false);
+				$("input:checkbox[name='member_no'][value='"+memberNum[idx]+"']")
+					.parent("td").next().next().next().next().next().children().prop("disabled", false);
+				$("input:checkbox[name='member_no'][value='"+memberNum[idx]+"']")
+					.parent("td").next().next().next().next().next().next().children().prop("disabled", false);
+			}
+			if("${val.focus}"=="position"){
+				$("input:checkbox[name='member_no'][value='${val.index}']")
+				.parent().next().next().next().next().children().focus();
+			}
+			if("${val.focus}"=="join"){
+				$("input:checkbox[name='member_no'][value='${val.index}']")
+				.parent().next().next().next().next().next().children().focus();
+			}
+			if("${val.focus}"=="out"){
+				$("input:checkbox[name='member_no'][value='${val.index}']")
+				.parent().next().next().next().next().next().next().children().focus();
+			}
+		}
+		
+		$(document).on("click", "input:checkbox[name='member_no']",function(){
+			if($(this).is(":checked")){
+				removeAttrDisable(this);
+			}else{
+				setDisabled(this);
+			}
+		});
+		setDatePicketInit();
+	});
+
+	function removeAttrDisable(checkbox){
+		$(checkbox).parent("td").next().next().next().next().children().prop("disabled", false);
+		$(checkbox).parent("td").next().next().next().next().next().children().prop("disabled", false);
+		$(checkbox).parent("td").next().next().next().next().next().next().children("input").prop("disabled", false);
+	}
+	
+	function setDisabled(checkbox){
+		$(checkbox).parent().next().next().next().next().children("input").attr("disabled", "disabled");
+		$(checkbox).parent().next().next().next().next().next().children("input").attr("disabled", "disabled");
+		$(checkbox).parent().next().next().next().next().next().next().children("input").attr("disabled", "disabled");
+	}
+	</script>
 </head>
 <body>
+
 <jsp:include page="/WEB-INF/jsp/menu/sidebar.jsp" flush="false"/>
 <jsp:include page="/WEB-INF/jsp/menu/top.jsp" flush="false"/>
 <div class="container">
@@ -157,8 +283,9 @@ function setDatePicketInit(){
 		<form id="frm">
 		<input type="hidden" name="page" value="${cri.page }">
 		<input type="hidden" name="perPageNum" value="${cri.perPageNum }">
-		<input type="hidden" name="loc" value="${cri.location }">
+		<input type="hidden" name="location" value="${cri.location }" id="location">
 		<input type="hidden" name="pno">
+		<input type="hidden" name="callMemberList" id="callMemberList">
 		<table class="table table-default" style="background-color: #e4e4e4">
 			<thead>
 				<tr>
@@ -258,13 +385,13 @@ function setDatePicketInit(){
 						</select>
 						</td>
 						<td>
-							<input type="text" class="form-control" name="position">
+							<input type="text" class="form-control" name="position" disabled="disabled">
 						</td>
 						<td>
-							<input type="text" class="form-control" name="join" readonly="readonly">
+							<input type="text" class="form-control" name="join" readonly="readonly" disabled="disabled">
 						</td>
 						<td>
-							<input type="text" class="form-control" name="out" readonly="readonly">
+							<input type="text" class="form-control" name="out" readonly="readonly" disabled="disabled">
 						</td>
 					</tr>
 					</c:forEach>

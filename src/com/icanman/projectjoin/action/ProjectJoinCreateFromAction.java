@@ -1,6 +1,5 @@
 package com.icanman.projectjoin.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.icanman.employee.model.Career;

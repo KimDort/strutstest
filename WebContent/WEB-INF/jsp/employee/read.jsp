@@ -146,7 +146,7 @@
 							</th>
 							<td colspan="3">
 								<input type="text" name="idnumber1" class="form-control" maxlength="6" id="idnumber1" value="${employee.idnumber1 }">&nbsp;-
-								<input type="text" name="idnumber2" class="form-control" maxlength="7" id="idnumber2" value="${employee.idnumber2 }">
+								<input type="password" name="idnumber2" class="form-control" maxlength="7" id="idnumber2" value="${employee.idnumber2 }">
 							</td>
 							
 						</tr>
