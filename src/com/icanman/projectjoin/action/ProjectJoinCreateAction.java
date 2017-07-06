@@ -20,6 +20,7 @@ public class ProjectJoinCreateAction implements Action{
 	private int callMemberList;
 	private String location;
 	private Validate val;
+	private int pno;
 	@Override
 	public String execute() throws Exception {
 		cri = new SearchCriteria();
@@ -33,6 +34,7 @@ public class ProjectJoinCreateAction implements Action{
 		if(!val.getTrue()){
 			result="input";
 		}else{
+			projectJoinService.register(createList());
 			if("project".equals(location)){
 				result ="projectSuccess";
 			}
@@ -122,13 +124,21 @@ public class ProjectJoinCreateAction implements Action{
 	public void setOut(String[] out) {
 		this.out = out;
 	}
+	public int getPno() {
+		return pno;
+	}
+
+	public void setPno(int pno) {
+		this.pno = pno;
+	}
+
 	public List<ProjectJoin> createList()throws Exception{
 		List<ProjectJoin> list = new ArrayList<>();
 		if(member_no!=null){
 			try {
 				for(int idx=0;idx<this.member_no.length;idx++){
-					System.out.println("액션 인 파라메터 : "+this.position[idx]);
 					ProjectJoin projectJoin =new ProjectJoin();
+					projectJoin.setPno(this.pno);
 					projectJoin.setMno(this.member_no[idx]);
 					projectJoin.setPosition(this.position[idx]);
 					projectJoin.setJoin(this.join[idx]);
@@ -142,4 +152,5 @@ public class ProjectJoinCreateAction implements Action{
 		
 		return list;
 	}
+	
 }

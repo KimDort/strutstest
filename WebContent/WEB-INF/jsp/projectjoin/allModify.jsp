@@ -19,30 +19,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <script>
-var memberNum= new Array();
-var positionText = new Array();
-var startDate = new Array();
-var endDate = new Array();
-
-<c:forEach items="${member_no }" var="idx">
-	memberNum.push("${idx}");
-</c:forEach>
-<c:forEach items="${position }" var="idx">
-	positionText.push("${idx}");
-</c:forEach>
-<c:forEach items="${join }" var="idx">
-	startDate.push("${idx}");
-</c:forEach>
-<c:forEach items="${out }" var="idx">
-	endDate.push("${idx}");
-</c:forEach>
 var career=new Array();
-var callMethodCount=0;
-<c:forEach items="${career }" var="car">
+<c:forEach items="${careerList }" var="car">
 var map={"no":"${car.period_no}","mno":"${car.member_no}","start":"${car.period_start}","end":"${car.period_end}",
 				"company":"${car.period_company}", "rank":"${car.period_rank}","position":"${car.period_position}"};
 career.push(map);
 </c:forEach>
+
 function period(no){
 	$("#period_modal_body").empty();
 	var str="<table class='table table-default'>"
@@ -89,20 +72,6 @@ function addMember(){
 		return;
 	}
 	
-}
-function getProjectInfo(){
-	jsonUrl="${pageContext.request.contextPath }/projectjoin/selectProjectInfo.do?projectSelectNum="+$("#selectProject option:selected").val();
-	$.getJSON(jsonUrl, function(date){
-		$(date).each(function(){
-			$("#projectInfoName").val(this.projectSelectInfo.name);
-			$("#projectInfoContent").val(this.projectSelectInfo.content);
-			$("#projectInfoStart").val(this.projectSelectInfo.start);
-			$("#projectInfoEnd").val(this.projectSelectInfo.end);
-			$("#projectInfoSkill").val(this.projectSelectInfo.create_skill);
-			$("#projectInfoOrder").val(this.projectSelectInfo.order_company);
-			$("#projectInfoETC").val(this.projectSelectInfo.etc);
-		});
-	});
 }
 function getShowMoreEmployee(checkNum){
 	var startNum=$("#lastNum").val();
@@ -197,37 +166,18 @@ function setDatePicketInit(){
         prevText: '이전 달' });
 }
 	$(document).ready(function(){
-		getProjectInfo();
-		if("${location}"=="projectjoin"){
-			$("#selectProject option:eq(0)").attr("selected", "selected");
-			var projectNumber=$("#selectProject option:selected").val();
-			$("#projectNumber").val(projectNumber);
-		}else{
-			$("#projectNumber").val("${projectNum}");
-		}
-		$("#selectProject").on("change", function(){
-			var selectVal= $("#selectProject option:selected").val();
-			$("#projectNumber").val(selectVal);
-			getProjectInfo();
+		$("a[id='removeMember']").on("click", function(){
+			if(confirm("해당 인원이 삭제 됩니다.\n진행하시겠습니까?")){
+				$(this).parent().parent().remove();
+			}
 		});
-		
-		if($("#selectProject").is(":disabled")){
-			$("#changeProject").on("click", function(){
-				if(confirm("다른 프로젝트를 선택하시겠습니까?")){
-					$("#selectProject").removeAttr("disabled");
-					return;
-				}else{
-					return;
-				}
-			});
-		}
-		
-		if($("#location").val()=="projectjoin"){
-			$("#selectProject").removeAttr("disabled");
-		}else{
-			$("#selectProject").attr("disabled", "disabled");
-		}
-		
+		$("#allRemoveMenber").on("click", function(){
+			if(confirm("인원 전체를 삭제하시겠습니까?")){
+				$("a[id='removeMember']").parent().parent().remove();
+			}else{
+				
+			}
+		});
 		if("${val.message}"!=""){
 			alert("${val.message}");
 			
@@ -299,6 +249,7 @@ function setDatePicketInit(){
 			setDisabled($("input[type=checkbox]"));
 		}
 	});
+	
 	</script>
 </head>
 <body>
@@ -330,19 +281,7 @@ function setDatePicketInit(){
 						Currently<br>Selected<br>Project
 					</th>
 					<td width="400px" colspan="12">
-						<select class="form-control" disabled="disabled" id="selectProject">
-							<c:forEach items="${project }" var="idx">
-								<c:if test="${projectNum eq idx.no }">
-									<option value="${idx.no }" selected="selected">${idx.name }</option>
-								</c:if>
-								<c:if test="${projectNum ne idx.no }">
-									<option value="${idx.no }">${idx.name }</option>
-								</c:if>
-							</c:forEach>
-						</select>
-					</td>
-					<td width="150px">
-						<input type="button" class="btn btn-default" value="Change Porject" id="changeProject">
+						<input type="text" class="form-control" value="${project.name }" disabled="disabled">
 					</td>
 				</tr>
 			</thead>
@@ -351,12 +290,18 @@ function setDatePicketInit(){
 					<td colspan="14"><h4>Project Info</h4></td>
 				</tr>
 				<tr>
-					<th>Content</th><td><input type="text" class="form-control" id="projectInfoContent" readonly="readonly"></td>
-					<th>Start Day</th><td><input type="text" class="form-control" id="projectInfoStart" readonly="readonly"></td>
-					<th>End Day</th><td><input type="text" class="form-control" id="projectInfoEnd" readonly="readonly"></td>
-					<th>Create<br>Skill<td><input type="text" class="form-control" id="projectInfoSkill" readonly="readonly"></td>
-					<th>Order<br>Company<td><input type="text" class="form-control" id="projectInfoOrder" readonly="readonly"></td>
-					<th>ETC</th><td><input type="text" class="form-control" id="projectInfoETC" readonly="readonly"></td>
+					<th>Content</th>
+						<td><input type="text" class="form-control" id="projectInfoContent" readonly="readonly" value="${project.content }"></td>
+					<th>Start Day</th>
+						<td><input type="text" class="form-control" id="projectInfoStart" readonly="readonly" value="${project.start }"></td>
+					<th>End Day</th>
+						<td><input type="text" class="form-control" id="projectInfoEnd" readonly="readonly" value=${project.end }></td>
+					<th>Create<br>Skill</th>
+						<td><input type="text" class="form-control" id="projectInfoSkill" readonly="readonly" value="${project.create_skill }"></td>
+					<th>Order<br>Company</th>
+						<td><input type="text" class="form-control" id="projectInfoOrder" readonly="readonly" value=${project.order_company }></td>
+					<th>ETC</th>
+						<td><input type="text" class="form-control" id="projectInfoETC" readonly="readonly" value="${project.etc }"></td>
 				</tr>
 			</tbody>
 			<tfoot>
@@ -374,23 +319,23 @@ function setDatePicketInit(){
 						<th>Position</th>
 						<th width="150px">Start Day</th>
 						<th width="150px">End Day</th>
+						<th width="50px">
+							<a class="btn btn-default glyphicon glyphicon-minus" id="allRemoveMenber"></a>
+						</th>
 					</tr>
 				</thead>
 				<tbody class="employeeTableList">
-					<c:forEach items="${employee }" var="idx" varStatus="status">
+					<c:forEach items="${employeeList }" var="idx" varStatus="status">
 						<tr>
 							<td>
 								<input type="checkbox" class="checkbox" value="${idx.no }" name="member_no">
 							</td>
 							<td>
 								${idx.name }
-								<c:if test="${status.last }">
-									<input type="hidden" value="${idx.rowNum }" id="lastNum">
-								</c:if>
 							</td>
 							<td>
 								<c:set var="totalCareer" value="0"/>
-								<c:forEach items="${career }" var="car" varStatus="status">
+								<c:forEach items="${careerList }" var="car" varStatus="status">
 									<c:if test="${idx.no eq car.member_no }">
 										<c:if test="${car.totalCareer > 12 }">
 										<c:set var="totalCareer" value="${totalCareer + car.totalCareer }"/>
@@ -420,24 +365,26 @@ function setDatePicketInit(){
 							</c:forEach>
 						</select>
 						</td>
+						<c:forEach items="${projectJoinList }" var="joinList">
+							<c:if test="${idx.no eq joinList.mno }">
+								<td>
+									<input type="text" class="form-control" name="position" disabled="disabled" value="${joinList.position }">
+								</td>
+								<td>
+									<input type="text" class="form-control" name="join" readonly="readonly" disabled="disabled" value="${joinList.join }">
+								</td>
+								<td>
+									<input type="text" class="form-control" name="out" readonly="readonly" disabled="disabled" value="${joinList.out }">
+								</td>
+							</c:if>
+						</c:forEach>
 						<td>
-							<input type="text" class="form-control" name="position" disabled="disabled">
-						</td>
-						<td>
-							<input type="text" class="form-control" name="join" readonly="readonly" disabled="disabled">
-						</td>
-						<td>
-							<input type="text" class="form-control" name="out" readonly="readonly" disabled="disabled">
+							<a class="btn btn-default glyphicon glyphicon-minus" id="removeMember"></a>
 						</td>
 					</tr>
 					</c:forEach>
 				</tbody>
 				<tfoot>
-					<tr>
-						<td colspan="7" align="right">Member More Show
-							<a class="btn btn-default glyphicon glyphicon-plus" onclick="getShowMoreEmployee()"></a>
-						</td>
-					</tr>
 					<tr>
 						<td colspan="7" align="right">
 							<input type="button" value="Add Member" class="btn btn-default" onclick="addMember()">

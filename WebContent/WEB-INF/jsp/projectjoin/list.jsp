@@ -22,6 +22,12 @@
 				+"?page=${cri.page}&perPageNum=${cri.perPageNum}&location=projectjoin";
 		$(location).attr("href",str);
 	};
+	function allModify(ProjectNum){
+		if(confirm("수정하시겠습니까?")){
+			var url="${pageContext.request.contextPath }/projectjoin/allModify.do?projectNumber="+ProjectNum;
+			$(location).attr("href", url);
+		}
+	}
 	function deleteProject(ProjectNum){
 		if(confirm("정말 삭제하시겠습니까?")){
 			
@@ -32,7 +38,7 @@
 	function userInfo(memberNum){
 		$(".modal-header").empty();
 		$(".modal-body").empty();
-		var url="${pageContext.request.contextPath }/member/userInfo.do?no="+memberNum;
+		var url="${pageContext.request.contextPath }/employee/userInfo.do?no="+memberNum;
 		$.getJSON(url, function(data){
 			$.each(data, function(key, value){
 				if(key=='userInfo'){
@@ -90,12 +96,13 @@
 			<thead>
 				<tr>
 					<th width="300px">Project Name</th>
-					<th width="150px">Join Member</th>
+					<th width="80px">Project<br>Modify</th>
+					<th width="80px">Join<br>Member</th>
 					<th width="80px">Position</th>
 					<th width="100px">Join Day</th>
 					<th width="100px">Out Day</th>
-					<th width="100px">Modify</th>
-					<th width="100px" align="right">Delete</th>
+					<th width="8px">Modify</th>
+					<th width="80px" align="right">Delete</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -108,7 +115,16 @@
 				</c:if>
 				<c:forEach items="${list }" var="idx" varStatus="status">
 					<tr>
-						<td>${idx.name eq list[status.index+1].name ?'':idx.name}</td>
+						<td>
+							<c:if test="${not empty idx.name }">
+								${idx.name }
+							</c:if>
+						</td>
+						<td>
+							<c:if test="${not empty idx.name }">
+								<input type="button" class="btn btn-default" value="Modify" onclick="allModify(${idx.pno})">
+							</c:if>
+						</td>
 						<td><a href="#" onclick="userInfo(${idx.mno})"
 						data-toggle="modal" data-target="#userInfoModal">${idx.member }</a></td>
 						<td>${idx.position}</td>

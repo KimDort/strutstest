@@ -18,6 +18,41 @@ import com.icanman.tools.DBConn;
 import com.icanman.tools.SearchCriteria;
 //Employee Service Class
 public class EmployeeService{
+	
+	public List<Career> readCareerProjectJoin(int projectNum)throws Exception{
+		DBConn dbConn=new DBConn();
+		List<Career> list=new ArrayList<>();
+		CareerDAO dao=new CareerDAO();	
+		Connection conn =null;
+		try {
+			conn=dbConn.getConnection();
+			list=createTotalCareer(dao.readProjectJoin(conn, projectNum));
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+		}
+		
+		return list;
+	}
+	public List<Employee> readProjectJoin(int projectNum)throws Exception{
+		DBConn dbConn=new DBConn();
+		List<Employee> list=new ArrayList<>();
+		EmployeeDAO dao=new EmployeeDAO();	
+		Connection conn =null;
+		try {
+			conn=dbConn.getConnection();
+			list=dao.readProjectJoin(conn, projectNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+		}
+		
+		return list;
+	}
 	public List<Employee> list(SearchCriteria cri)throws Exception{
 		DBConn dbConn=new DBConn();
 		List<Employee> list=new ArrayList<>();

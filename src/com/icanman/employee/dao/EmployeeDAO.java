@@ -319,4 +319,38 @@ public class EmployeeDAO{
 		}
 		return list;
 	}
+	
+	public List<Employee> readProjectJoin(Connection conn, int projectNum)throws Exception{
+		List<Employee> list = new ArrayList<>();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql="SELECT "
+				+ "			EMPLOYEE.MEMBER_NO AS MEMBER_NO, EMPLOYEE.MEMBER_NAME AS MEMBER_NAME, "
+				+ "			EMPLOYEE.MEMBER_HAVESKILL AS MEMBER_HAVESKILL"
+				+ "		FROM "
+				+ "			EMPLOYEE, PROJECT_JOIN "
+				+ "		WHERE "
+				+ "			EMPLOYEE.MEMBER_NO=PROJECT_JOIN.MEMBER_NO "
+				+ "		AND "
+				+ "			PROJECT_JOIN.PROJECT_NO=?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, projectNum);
+			rs=pstmt.executeQuery();
+			while(rs.next()){
+				Employee employee = new Employee();
+				employee.setNo(rs.getInt("MEMBER_NO"));
+				employee.setName(rs.getString("MEMBER_NAME"));
+				employee.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
+				list.add(employee);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		
+		return list;
+	}
 }

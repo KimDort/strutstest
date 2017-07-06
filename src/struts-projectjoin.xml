@@ -39,10 +39,11 @@
     		<result name="success">/WEB-INF/jsp/project/read.jsp</result>
     	</action>
     	
-    	<action name="modify" class="com.icanman.project.action.ProjectModifyFromAction">
+    	<action name="allModify" class="com.icanman.projectjoin.action.ProjectModifyAllFromAction">
     		<interceptor-ref name="params"/>
-    		<result name="success">/WEB-INF/jsp/project/modify.jsp</result>
+    		<result name="success">/WEB-INF/jsp/projectjoin/allModify.jsp</result>
     	</action>
+    	
     	<action name="modifyDone" class="com.icanman.project.action.ProjectModifyAction">
     		<interceptor-ref name="prepare"/>
     		<interceptor-ref name="modelDriven"/>
@@ -59,6 +60,10 @@
     	</action>
     	
     	<action name="moreShowMember" class="com.icanman.project.action.MoreShowMemberAction">
+    		<result name="success" type="json"></result>
+    	</action>
+    	
+    	<action name="modifyMember" class="com.icanman.project.action.ModifyMemberAction">
     		<result name="success" type="json"></result>
     	</action>
     </package>

@@ -15,6 +15,22 @@ import com.icanman.tools.SearchCriteria;
 import com.icanman.tools.Tools;
 
 public class ProjectJoinService {
+	
+	public List<ProjectJoin> read(int projectNumber)throws Exception{
+		DBConn dbConn=new DBConn();
+		Connection conn= dbConn.getConnection();
+		List<ProjectJoin> list = new ArrayList<>();
+		ProjectJoinDAO dao = new ProjectJoinDAO();
+		try {
+			list=dao.read(conn, projectNumber);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {if(conn!=null){conn.close();}}
+		
+		return list;
+	}
+	
 	public List<ProjectJoin> list(SearchCriteria cri)throws SQLException{
 		DBConn dbConn=new DBConn();
 		Connection conn= dbConn.getConnection();
@@ -22,6 +38,14 @@ public class ProjectJoinService {
 		ProjectJoinDAO dao = new ProjectJoinDAO();
 		try {
 			list=dao.list(conn, cri);
+			
+			for(int idx=0;idx<list.size()-1;idx++){
+				for(int jdx=1; jdx< list.size();jdx++){
+					if(list.get(idx).getName().equals(list.get(jdx).getName())){
+						list.get(jdx).setName("");
+					}
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -111,5 +135,19 @@ public class ProjectJoinService {
 		}
 		
 		return val;
+	}
+	
+	public int register(List<ProjectJoin> list)throws SQLException{
+		int success=0;
+		DBConn dbConn=new DBConn();
+		Connection conn= dbConn.getConnection();
+		ProjectJoinDAO dao = new ProjectJoinDAO();
+		try {
+			success=dao.register(conn, list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return success;
 	}
 }

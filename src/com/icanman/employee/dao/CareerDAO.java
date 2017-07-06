@@ -11,7 +11,48 @@ import com.icanman.employee.model.Career;
 import com.icanman.employee.model.Employee;
 
 public class CareerDAO {
-	public int register(Connection conn, List<Career> list){
+	public List<Career> readProjectJoin(Connection conn, int projectNum)throws Exception{
+		List<Career> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs=null;
+		String sql="SELECT"
+				+ "		CAREER.CAREER_NO AS CAREER_NO, CAREER.MEMBER_NO AS MEMBER_NO, "
+				+ "		CAREER.CAREER_PERIOD_START AS CAREER_PERIOD_START, "
+				+ "		NVL(CAREER.CAREER_PERIOD_END,SYSDATE) AS CAREER_PERIOD_END, "
+				+ "		CAREER.CAREER_COMPANY AS CAREER_COMPANY, "
+				+ "		CAREER.CAREER_RANK AS CAREER_RANK, "
+				+ "		CAREER.CAREER_POSITION AS CAREER_POSITION "
+				+ "		FROM "
+				+ "			CAREER, PROJECT_JOIN"
+				+ "		WHERE "
+				+ "			CAREER.MEMBER_NO = PROJECT_JOIN.MEMBER_NO"
+				+ "		AND"
+				+ "			PROJECT_JOIN.PROJECT_NO=?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, projectNum);
+			rs=pstmt.executeQuery();
+			while(rs.next()){
+				Career career = new Career();
+				career.setPeriod_no(rs.getInt("CAREER_NO"));
+				career.setMember_no(rs.getInt("MEMBER_NO"));
+				career.setPeriod_start(rs.getString("CAREER_PERIOD_START"));
+				career.setPeriod_end(rs.getString("CAREER_PERIOD_END"));
+				career.setPeriod_company(rs.getString("CAREER_COMPANY"));
+				career.setPeriod_rank(rs.getString("CAREER_RANK"));
+				career.setPeriod_position(rs.getString("CAREER_POSITION"));
+				list.add(career);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		
+		return list;
+	}
+	public int register(Connection conn, List<Career> list)throws Exception{
 		int success = 0;
 		PreparedStatement pstmt = null;
 		try {
@@ -28,6 +69,7 @@ public class CareerDAO {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
 		}
