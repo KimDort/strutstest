@@ -11,6 +11,7 @@ import com.icanman.projectjoin.model.ProjectJoin;
 import com.icanman.tools.SearchCriteria;
 
 public class ProjectJoinDAO {
+	
 	public List<ProjectJoin> list(Connection conn, SearchCriteria cri)throws SQLException{
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
@@ -114,5 +115,26 @@ public class ProjectJoinDAO {
 		}
 		
 		return list;
+	}
+	
+	public int deleteMember(Connection conn, int memberNum)throws Exception{
+		int success=0;
+		PreparedStatement pstmt=null;
+		String sql="DELETE "
+				+ "		FROM "
+				+ "			PROJECT_JOIN "
+				+ "		WHERE MEMBER_NO = ?";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, memberNum);
+			success=pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		
+		return success;
 	}
 }

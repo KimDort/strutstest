@@ -28,11 +28,17 @@
 			$(location).attr("href", url);
 		}
 	}
-	function deleteProject(ProjectNum){
-		if(confirm("정말 삭제하시겠습니까?")){
-			
+	function deleteMember(memberName, memberNum){
+		if(confirm(memberName+"를(을) 프로젝트에서 제외 하시겠습니까?")){
+			if(confirm("정말 삭제하시겠습니까?")){
+				var url="${pageContext.request.contextPath }/projectjoin/memberDelete.do?memberNum="+memberNum+
+						"&page=${cri.page}&perPageNum=${cri.perPageNum}&location=${cri.location}";
+				$(location).attr("href", url);	
+			}else{
+				return;
+			}
 		}else{
-			
+			return;
 		}
 	};
 	function userInfo(memberNum){
@@ -131,7 +137,7 @@
 						<td>${idx.join }</td>
 						<td>${idx.out }</td>
 						<td><input type="button" class="btn btn-default" value="Modify"></td>
-						<td><input type="button" class="btn btn-default" value="Delete" onclick="deleteMember()"></td>
+						<td><input type="button" class="btn btn-default" value="Delete" onclick="deleteMember('${idx.member }',${idx.mno})"></td>
 					</tr>		
 				</c:forEach>		
 				<tr>

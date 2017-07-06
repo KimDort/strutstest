@@ -15,13 +15,27 @@ import com.icanman.tools.SearchCriteria;
 import com.icanman.tools.Tools;
 
 public class ProjectJoinService {
-	
+	public int deleteMember(int memberNum)throws Exception{
+		int success=0;
+		DBConn dbConn=new DBConn();
+		ProjectJoinDAO dao = new ProjectJoinDAO();
+		Connection conn= null;
+		try {
+			conn=dbConn.getConnection();
+			dao.deleteMember(conn, memberNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {if(conn!=null){conn.close();}}
+		return success;
+	}
 	public List<ProjectJoin> read(int projectNumber)throws Exception{
 		DBConn dbConn=new DBConn();
-		Connection conn= dbConn.getConnection();
 		List<ProjectJoin> list = new ArrayList<>();
 		ProjectJoinDAO dao = new ProjectJoinDAO();
+		Connection conn=null;
 		try {
+			conn= dbConn.getConnection();
 			list=dao.read(conn, projectNumber);
 		} catch (Exception e) {
 			e.printStackTrace();

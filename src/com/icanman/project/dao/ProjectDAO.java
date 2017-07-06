@@ -66,7 +66,7 @@ public class ProjectDAO {
 		try {
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1, cri.getPageStart());
-			pstmt.setInt(2, cri.getPerPageNum());
+			pstmt.setInt(2, cri.getPageEnd());
 			rs=pstmt.executeQuery();
 			
 			while(rs.next()){
@@ -100,7 +100,8 @@ public class ProjectDAO {
 				+"		PROJECT_NO, PROJECT_NAME, PROJECT_CONTENT, PROJECT_START, PROJECT_END, "
 				+"		PROJECT_ORDER_COMPANY, PROJECT_CREATE_SKILL, PROJECT_ETC, PROJECT_ISDELETE "
 				+"	FROM "
-				+"		PROJECT";
+				+"		PROJECT"
+				+ " WHERE PROJECT_ISDELETE != 'Y' ";
 		try {
 			pstmt=conn.prepareStatement(sql);
 			rs=pstmt.executeQuery();
@@ -119,6 +120,7 @@ public class ProjectDAO {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
 		}

@@ -99,7 +99,8 @@ public class EmployeeDAO{
 					+"					ORDER BY MEMBER_NAME ASC)"
 					+"		)"
 					+ "		WHERE R >=1 "
-					+ "		AND R <= 5";
+					+ "		AND R <= 5"
+					+ "		AND MEMBER_NO NOT IN(SELECT MEMBER_NO FROM PROJECT_JOIN)";
 				try {
 					pstmt=conn.prepareStatement(sql);
 					rs=pstmt.executeQuery();
