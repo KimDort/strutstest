@@ -11,6 +11,14 @@ public class ProjectJoin extends Project{
 	private String out;
 	private String member;
 	private String project;
+	private String isNew;
+	
+	public String getIsNew() {
+		return isNew;
+	}
+	public void setIsNew(String isNew) {
+		this.isNew = isNew;
+	}
 	public int getNo() {
 		return no;
 	}

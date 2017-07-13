@@ -1,6 +1,5 @@
 package com.icanman.projectjoin.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.icanman.employee.model.Career;
@@ -16,6 +15,7 @@ public class ProjectModifyAllFromAction implements Action{
 	private int projectNumber;
 	private List<ProjectJoin> projectJoinList;
 	private List<Employee> employeeList;
+	private List<Employee> addMoreEmployeeList;
 	private List<Career> careerList;
 	private Project project;
 	@Override
@@ -24,6 +24,7 @@ public class ProjectModifyAllFromAction implements Action{
 		EmployeeService employeeService = new EmployeeService();
 		ProjectService projectService = new ProjectService();
 		
+		addMoreEmployeeList=employeeService.addMoreEmployee();
 		careerList = employeeService.readCareerProjectJoin(projectNumber);
 		project = projectService.read(projectNumber);
 		projectJoinList=projectJoinService.read(projectNumber);
@@ -31,6 +32,14 @@ public class ProjectModifyAllFromAction implements Action{
 		return "success";
 	}
 	
+	public List<Employee> getAddMoreEmployeeList() {
+		return addMoreEmployeeList;
+	}
+
+	public void setAddMoreEmployeeList(List<Employee> addMoreEmployeeList) {
+		this.addMoreEmployeeList = addMoreEmployeeList;
+	}
+
 	public Project getProject() {
 		return project;
 	}

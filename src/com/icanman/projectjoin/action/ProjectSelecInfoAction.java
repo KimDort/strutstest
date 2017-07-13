@@ -1,4 +1,4 @@
-package com.icanman.project.action;
+package com.icanman.projectjoin.action;
 
 import com.icanman.project.model.Project;
 import com.icanman.project.service.ProjectService;

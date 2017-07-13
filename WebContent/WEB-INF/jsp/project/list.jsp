@@ -10,9 +10,11 @@
  
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath }/js/script.js"></script>
 <link href="${pageContext.request.contextPath }/css/style.css" rel="Stylesheet" type="text/css">
 <script>
@@ -67,6 +69,30 @@
 			return;
 		}
 	}
+	$(document).ready(function(){
+		$("#searchProject").on("change", function(){
+			if($("#searchProject option:selected").val()=="searcgDate"){
+				var str="<div class='form-inline'>"
+						+"<input type='text' name='startDay' class='form-control' style='width:45%'>"
+						+"~<input type='text' name='endDay' class='form-control' style='width:45%'></div>";
+				$("#searchProjectBox").html(str);
+				$("input[name='startDay']").datepicker({
+					dateFormat:'yy-mm-dd',
+					changeMonth: true, 
+			        changeYear: true,
+			        nextText: '다음 달',
+			        prevText: '이전 달' 
+				});
+				$("input[name='endDay']").datepicker({
+					dateFormat:'yy-mm-dd',
+					changeMonth: true, 
+			        changeYear: true,
+			        nextText: '다음 달',
+			        prevText: '이전 달' 
+				});
+			}
+		});
+	});
 </script>
 <title>Insert title here</title>
 </head>
@@ -95,16 +121,15 @@
 				</tr>
 			</thead>
 			<tbody>
-			<tr>
+				<tr>
 					<td width="200px">
-						<select class="form-control">
+						<select class="form-control" id="searchProject">
 							<option value="searchName">Name</option>
 							<option value="searchCompany">Company</option>
-							<option value="searchStart">Start Day</option>
-							<option value="searchDay">End Day</option>
+							<option value="searcgDate">Date</option>
 						</select>
 					</td>
-					<td>
+					<td id="searchProjectBox">
 						<input type="text" class="form-control">
 					</td>
 					<td width="100px">
@@ -140,7 +165,7 @@
 					<tr>
 						<td>${idx.no }</td>
 						<td>
-							<a href="${pageContext.request.contextPath }/project/read.do?pno=${idx.no}&page=${cri.page}&perPageNum=${cri.perPageNum}&loc=${cri.location}">
+							<a href="${pageContext.request.contextPath }/project/read.do?pno=${idx.no}&page=${cri.page}&perPageNum=${cri.perPageNum}&location=project">
 								${idx.name }
 							</a>
 						</td>

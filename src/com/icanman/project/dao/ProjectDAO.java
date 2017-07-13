@@ -62,11 +62,17 @@ public class ProjectDAO {
 				+ "		PROJECT_NO > 0 "
 				+ "	AND PROJECT_ISDELETE != 'Y' "
 				+ "	AND R >=? AND R <= ? "
-				+ "	AND PROJECT_ISDELETE='N'";
+				+ "	AND PROJECT_ISDELETE='N'"
+				+ "	AND PROJECT_START <= ? "
+				+ "	AND PROJECT_END >= ?";
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, cri.getPageStart());
-			pstmt.setInt(2, cri.getPageEnd());
+			int idx=1;
+			pstmt.setInt(idx++, cri.getPageStart());
+			pstmt.setInt(idx++, cri.getPageEnd());
+			pstmt.setString(idx++, cri.getStartDay());
+			pstmt.setString(idx++, cri.getEndDay());
+			
 			rs=pstmt.executeQuery();
 			
 			while(rs.next()){

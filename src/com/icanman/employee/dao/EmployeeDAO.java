@@ -12,7 +12,40 @@ import com.icanman.tools.SearchCriteria;
 
 //Employee DAO Class
 public class EmployeeDAO{
-	
+	public List<Employee> addMoreEmployee(Connection conn)throws Exception{
+		List<Employee> list = new ArrayList<>();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql="SELECT"
+				+ "		MEMBER_NO, MEMBER_NAME, MEMBER_HAVESKILL, MEMBER_POSITION, MEMBER_ISNEW "
+				+ "		FROM "
+				+ "			EMPLOYEE "
+				+ "		WHERE "
+				+ "			MEMBER_ISEXIT = 'N'"
+				+ "		AND "
+				+ "			MEMBER_NO NOT IN(SELECT MEMBER_NO FROM PROJECT_JOIN)";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			while(rs.next()){
+				Employee employee = new Employee();
+				employee.setNo(rs.getInt("MEMBER_NO"));
+				employee.setName(rs.getString("MEMBER_NAME"));
+				employee.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
+				employee.setPosition(rs.getString("MEMBER_POSITION"));
+				employee.setIsnew(rs.getString("MEMBER_ISNEW"));
+				list.add(employee);
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(rs!=null){try {rs.close();} catch (Exception e2) {}}
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		return list;
+	}
 	//Employee Get List Method
 	public List<Employee> list(Connection conn, SearchCriteria cri)throws Exception{
 		List<Employee> list = new ArrayList<>();
@@ -22,7 +55,11 @@ public class EmployeeDAO{
 				+ "		R, MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
 				+"		MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
 				+"		MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW,"
-				+"		PROJECT_HISTORY,  MEMBER_HAVESKILL, MEMBER_ISEXIT "
+				+"		CASE "
+				+"			WHEN PROJECT_HISTORY > 0 THEN '참가중'"
+				+"			WHEN PROJECT_HISTORY <= 0 THEN '미참가'"
+				+"		END AS PROJECT_HISTORY, "
+				+"		MEMBER_HAVESKILL,  MEMBER_HAVESKILL, MEMBER_ISEXIT "
 				+"		FROM "
 				+"		(SELECT ROWNUM AS R,"
 				+"			MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER,"
@@ -41,12 +78,18 @@ public class EmployeeDAO{
 				+ "		)"
 				+ "	WHERE R >= ? "
 				+ "	AND R <= ? "
-				+ "	AND MEMBER_ISEXIT = 'N' ";
+				+ "	AND MEMBER_ISEXIT = 'N' "
+				+ "	AND MEMBER_NAME LIKE '%' || ? || '%'"
+				+ "	AND MEMBER_ISNEW LIKE '%' || ? || '%'"
+				+ "	AND MEMBER_HAVESKILL LIKE '%' || ? || '%'";
 			try {
 				pstmt=conn.prepareStatement(sql);
 				int idx=1;
 				pstmt.setInt(idx++, cri.getPage());
 				pstmt.setInt(idx++, cri.getPageEnd());
+				pstmt.setString(idx++, cri.getName());
+				pstmt.setString(idx++, cri.getIsnew());
+				pstmt.setString(idx++, cri.getHaveskill());
 				rs=pstmt.executeQuery();
 				while(rs.next()){
 					Employee vo = new Employee();
@@ -63,7 +106,7 @@ public class EmployeeDAO{
 					vo.setOut(rs.getString("MEMBER_OUT"));
 					vo.setIsnew(rs.getString("MEMBER_ISNEW"));
 					vo.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
-					vo.setProjecthistory(rs.getInt("PROJECT_HISTORY"));
+					vo.setProjecthistory(rs.getString("PROJECT_HISTORY"));
 					vo.setIsexit(rs.getString("MEMBER_ISEXIT").charAt(0));
 					list.add(vo);
 				}
@@ -119,7 +162,7 @@ public class EmployeeDAO{
 						vo.setOut(rs.getString("MEMBER_OUT"));
 						vo.setIsnew(rs.getString("MEMBER_ISNEW"));
 						vo.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
-						vo.setProjecthistory(rs.getInt("PROJECT_HISTORY"));
+						vo.setProjecthistory(rs.getString("PROJECT_HISTORY"));
 						vo.setIsexit(rs.getString("MEMBER_ISEXIT").charAt(0));
 						vo.setRowNum(rs.getInt("R"));
 						list.add(vo);
@@ -138,7 +181,12 @@ public class EmployeeDAO{
 		int success=0;
 		PreparedStatement pstmt=null;
 		try {
-			String sql="INSERT INTO EMPLOYEE VALUES(EMPLOYEESEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql="INSERT INTO "
+					+ "		EMPLOYEE("
+					+ "					MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER, MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
+					+ "					MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW, MEMBER_HAVESKILL, MEMBER_ISEXIT, MEMBER_POSITION"
+					+ "				) "
+					+ "		VALUES(SELECT NVL(MAX(MEMBER_NO),0)+1 FROM EMPLOYEE), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			pstmt=conn.prepareStatement(sql);
 			int idx=1;
 			pstmt.setString(idx++, vo.getName());
@@ -172,7 +220,14 @@ public class EmployeeDAO{
 		Employee employee = null;
 		try {
 			employee = new Employee();
-			String sql="SELECT * FROM EMPLOYEE WHERE MEMBER_NO = ? AND MEMBER_ISEXIT != 'Y'";
+			String sql="SELECT "
+					+ "		MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER, MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL, "
+					+ "		MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW, MEMBER_HAVESKILL, MEMBER_ISEXIT, MEMBER_POSITION "
+					+ "		FROM "
+					+ "		EMPLOYEE "
+					+ "			WHERE "
+					+ "				MEMBER_NO = ? "
+					+ "			AND MEMBER_ISEXIT != 'Y'";
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1, member_no);
 			rs=pstmt.executeQuery();
@@ -243,7 +298,7 @@ public class EmployeeDAO{
 		String sql="UPDATE "
 				+ "		EMPLOYEE SET "
 				+ "			MEMBER_ISEXIT='Y' "
-				+ "	WHERE "
+				+ "		WHERE "
 				+ "			MEMBER_NO=?";
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -307,7 +362,7 @@ public class EmployeeDAO{
 				vo.setOut(rs.getString("MEMBER_OUT"));
 				vo.setIsnew(rs.getString("MEMBER_ISNEW"));
 				vo.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
-				vo.setProjecthistory(rs.getInt("PROJECT_HISTORY"));
+				vo.setProjecthistory(rs.getString("PROJECT_HISTORY"));
 				vo.setIsexit(rs.getString("MEMBER_ISEXIT").charAt(0));
 				vo.setRowNum(rs.getInt("R"));
 				list.add(vo);
@@ -327,7 +382,8 @@ public class EmployeeDAO{
 		ResultSet rs=null;
 		String sql="SELECT "
 				+ "			EMPLOYEE.MEMBER_NO AS MEMBER_NO, EMPLOYEE.MEMBER_NAME AS MEMBER_NAME, "
-				+ "			EMPLOYEE.MEMBER_HAVESKILL AS MEMBER_HAVESKILL"
+				+ "			EMPLOYEE.MEMBER_HAVESKILL AS MEMBER_HAVESKILL, EMPLOYEE.MEMBER_POSITION AS MEMBER_POSITION,"
+				+ "			EMPLOYEE.MEMBER_ISNEW AS MEMBER_ISNEW "
 				+ "		FROM "
 				+ "			EMPLOYEE, PROJECT_JOIN "
 				+ "		WHERE "
@@ -343,6 +399,8 @@ public class EmployeeDAO{
 				employee.setNo(rs.getInt("MEMBER_NO"));
 				employee.setName(rs.getString("MEMBER_NAME"));
 				employee.setHaveskill(rs.getString("MEMBER_HAVESKILL"));
+				employee.setPosition(rs.getString("MEMBER_POSITION"));
+				employee.setIsnew(rs.getString("MEMBER_ISNEW"));
 				list.add(employee);
 			}
 		} catch (Exception e) {

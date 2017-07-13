@@ -20,12 +20,57 @@
 <title>Insert title here</title>
 <script>
 var career=new Array();
+var employeeArray = new Array();
+var addMoreEmplyee = new Array();
+ 
 <c:forEach items="${careerList }" var="car">
-var map={"no":"${car.period_no}","mno":"${car.member_no}","start":"${car.period_start}","end":"${car.period_end}",
-				"company":"${car.period_company}", "rank":"${car.period_rank}","position":"${car.period_position}"};
+	var map={"no":"${car.period_no}","mno":"${car.member_no}","start":"${car.period_start}","end":"${car.period_end}",
+			"company":"${car.period_company}", "rank":"${car.period_rank}","position":"${car.period_position}", 
+			"totalCareer":"${car.totalCareer}"};
 career.push(map);
 </c:forEach>
 
+<c:forEach items="${employeeList }" var="idx">
+var map={"no":"${idx.no}","name":"${idx.name}", "rank":"${idx.rank}","position":"${idx.position}",
+		"haveskill":"${idx.haveskill}" ,"isnew":"${idx.isnew}"};
+employeeArray.push(map);
+</c:forEach>
+
+<c:forEach items="${addMoreEmployeeList }" var="idx">
+var map={"no":"${idx.no}","name":"${idx.name}", "rank":"${idx.rank}","position":"${idx.position}",
+		"haveskill":"${idx.haveskill}" ,"isnew":"${idx.isnew}"};
+
+addMoreEmplyee.push(map);
+</c:forEach>
+function addMoreMember(){
+	var str;
+	if(addMoreEmplyee.length<=0){
+		str="<table class='table table-default'>"
+		+"<tr><td>Member Empty</td></tr>"
+		+"<table>";
+		$("#addMember_modal_body").append(str);
+	}else{
+		str="<table class='table table-default'>"
+			+"<thead><tr>"
+			+"<th><input type='checkbox' class='checkbox' id='allCheck'></th>"
+			+"<th>Name</th>"
+			+"<th>Career</th>"
+			+"<th>Is New</th>"
+			+"<th>Company</th>"
+			+"</tr></thead>";
+		for(var idx=0; idx<addMoreEmplyee.length;idx++){	
+			str+="<tr>"
+				+"<td><input type='checkbox' class='checkbox' name='addMember' value='"+addMoreEmplyee[idx].no+"'></td>"
+				+"<td>"+addMoreEmplyee[idx].name+"</td>"
+				+"<td>1년</td>"
+				+"<td>"+addMoreEmplyee[idx].isnew+"</td>"
+				+"<td>"+addMoreEmplyee[idx].company+"</td>"
+				+"</tr>"
+		}
+		str+="<table>";
+		$("#addMember_modal_body").append(str);
+	}
+}
 function period(no){
 	$("#period_modal_body").empty();
 	var str="<table class='table table-default'>"
@@ -260,10 +305,10 @@ function setDatePicketInit(){
 	<div class="row">
 		<div class="col-md-12 borderBox">
 			<ul class="breadcrumb">
-    			<li><a href="${pageContext.request.contextPath }/main.do">Home</a></li>
-   				<li><a href="${pageContext.request.contextPath }/jsp/project/list.jsp">Project</a></li>  
-   				<li><a href="${pageContext.request.contextPath }/jsp/project_working/list.jsp">Project Working</a></li>
-   				<li class="active">Add Working</li>
+    			<li><a href="${pageContext.request.contextPath }/index.do">Home</a></li>
+   				<li><a href="${pageContext.request.contextPath }/project/list.do?page=1&perPageNum=10&location=project">Project</a></li>  
+   				<li><a href="${pageContext.request.contextPath }/projectjoin/list.do?page=1&perPageNum=10&location=projectjoin">Project Join</a></li>
+   				<li class="active">Add Member</li>
   			</ul>
 		</div>
 		<div class="col-md-12 borderBox">
@@ -386,10 +431,11 @@ function setDatePicketInit(){
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="7" align="right">
-							<input type="button" value="Add Member" class="btn btn-default" onclick="addMember()">
-							<input type="reset" value="reset" class="btn btn-default">
-							<input type="button" value="cancel" class="btn btn-default">
+						<td colspan="8" align="right">
+							<input type="button" value="Add Member" class="btn btn-default" onclick="addMoreMember()"
+							data-toggle="modal" data-target="#addMember" onclick="">
+							<input type="button" value="Modify" class="btn btn-default" onclick="Modify()">
+							<input type="reset" value="List" class="btn btn-default">
 						</td>
 					</tr>
 				</tfoot>
@@ -407,6 +453,23 @@ function setDatePicketInit(){
  					<h4 class="modal-title">Member Career</h4>
  				</div>
 				<div class="modal-body" id="period_modal_body">
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal -->
+ 	<div class="modal fade" id="addMember" role="dialog">
+ 		<div class="modal-dialog modal-lg">
+ 			<div class="modal-content">
+ 				<div class="modal-header">
+ 					<button type="button" class="close" data-dismiss="modal">&times;</button>
+ 					<h4 class="modal-title">Add Member</h4>
+ 				</div>
+				<div class="modal-body" id="addMember_modal_body">
 					
 				</div>
 				<div class="modal-footer">

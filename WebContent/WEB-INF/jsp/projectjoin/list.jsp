@@ -24,7 +24,8 @@
 	};
 	function allModify(ProjectNum){
 		if(confirm("수정하시겠습니까?")){
-			var url="${pageContext.request.contextPath }/projectjoin/allModify.do?projectNumber="+ProjectNum;
+			var url="${pageContext.request.contextPath }/projectjoin/allModify.do?"
+					+"page=${cri.page}&perPageNum=${cri.perPageNum}&location=${cri.location}&projectNumber="+ProjectNum;
 			$(location).attr("href", url);
 		}
 	}
@@ -98,13 +99,14 @@
 			<input type="hidden" name="loc" value="project">
 		</form>
 		<div class="col-md-12 borderBox" >
-		<table class="table table-hover" style="width: 100%;">
+		<table class="table table-hover" style="width: 100%">
 			<thead>
 				<tr>
 					<th width="300px">Project Name</th>
 					<th width="80px">Project<br>Modify</th>
 					<th width="80px">Join<br>Member</th>
 					<th width="80px">Position</th>
+					<th width="100px">Is New<br>Is Career</th>
 					<th width="100px">Join Day</th>
 					<th width="100px">Out Day</th>
 					<th width="8px">Modify</th>
@@ -122,9 +124,9 @@
 				<c:forEach items="${list }" var="idx" varStatus="status">
 					<tr>
 						<td>
-							<c:if test="${not empty idx.name }">
+							<a href="${pageContext.request.contextPath }/project/read.do?pno=${idx.pno}&page=${cri.page}&perPageNum=${cri.perPageNum}&location=project">
 								${idx.name }
-							</c:if>
+							</a>
 						</td>
 						<td>
 							<c:if test="${not empty idx.name }">
@@ -134,6 +136,7 @@
 						<td><a href="#" onclick="userInfo(${idx.mno})"
 						data-toggle="modal" data-target="#userInfoModal">${idx.member }</a></td>
 						<td>${idx.position}</td>
+						<td>${idx.isNew }</td>
 						<td>${idx.join }</td>
 						<td>${idx.out }</td>
 						<td><input type="button" class="btn btn-default" value="Modify"></td>

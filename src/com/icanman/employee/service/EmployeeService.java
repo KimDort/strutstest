@@ -376,4 +376,22 @@ public class EmployeeService{
 		
 		return list;
 	}
+	
+	public List<Employee> addMoreEmployee()throws Exception{
+		DBConn dbConn=new DBConn();
+		Connection conn=null;
+		List<Employee> list = new ArrayList<>();
+		EmployeeDAO dao = new EmployeeDAO();
+		try {
+			conn=dbConn.getConnection();
+			list = dao.addMoreEmployee(conn);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+		}
+		
+		return list;
+	}
 }

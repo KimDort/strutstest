@@ -56,7 +56,13 @@ public class CareerDAO {
 		int success = 0;
 		PreparedStatement pstmt = null;
 		try {
-			String sql = "INSERT INTO CAREER VALUES((SELECT NVL(MAX(CAREER_NO),0)+1 FROM CAREER), (EMPLOYEESEQ.CURRVAL), ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO "
+					+ "		CAREER("
+					+ "				CAREER_NO, MEMBER_NO, CAREER_PERIOD_START, CAREER_PERIOD_END, CAREER_COMPANY, CAREER_RANK, CAREER_POSITION"
+					+ "				)"
+					+ "			 VALUES("
+					+ "				(SELECT NVL(MAX(CAREER_NO),0)+1 FROM CAREER), "
+					+ "				(SELECT NVL(MAX(MEMBER_NO,0)+1 FROM EMPLOYEE), ?, ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			for (int idx = 0; idx < list.size(); idx++) {
 				pstmt.setString(1, list.get(idx).getPeriod_start());

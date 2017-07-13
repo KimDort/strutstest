@@ -4,7 +4,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="${pageContext.request.contextPath }/jsp/main.jsp">
+			<a class="navbar-brand" href="${pageContext.request.contextPath }/index.do">
 				Ican Project Management
 			</a>
 		</div>

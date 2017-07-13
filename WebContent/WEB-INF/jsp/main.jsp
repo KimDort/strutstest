@@ -29,71 +29,49 @@
 						<th>Name</th>
 						<th>Work</th>
 						<th>Career</th>
-						<th width="50px">Project History</th>
+						<th>Is Project<br>Join</th>
+						<th>Rank</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>Gil Dong, Hong</td>
-						<td>Regular</td>
-						<td><a href="#">1년 2개월</a></td>
-						<td><a href="#">1</a></td>
-					</tr>
-					<tr>
-						<td>Gil Dong, Hong</td>
-						<td>Regular</td>
-						<td><a href="#">1년 2개월</a></td>
-						<td><a href="#">1</a></td>
-					</tr>
-					<tr>
-						<td>Gil Dong, Hong</td>
-						<td>Regular</td>
-						<td><a href="#">1년 2개월</a></td>
-						<td><a href="#">1</a></td>
-					</tr>
-					<tr>
-						<td>Gil Dong, Hong</td>
-						<td>Regular</td>
-						<td><a href="#">1년 2개월</a></td>
-						<td><a href="#">1</a></td>
-					</tr>
-					<tr>
-						<td>Gil Dong, Hong</td>
-						<td>Regular</td>
-						<td><a href="#">1년 2개월</a></td>
-						<td><a href="#">1</a></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<%-- <div class="col-md-4 borderBox">
-			<label>Notice / Schedule</label>
-			<label style="float: right"><a href="${pageContext.request.contextPath }/bbs/list.do?page=1&perPageNum=10">more</a></label>
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>Title</th>
-						<th width="50px">Writer</th>
-						<th width="100px">Reg.</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach items="${bbslist }" var="idx">
+					<c:forEach items="${employeeList }" var="idx">
 						<tr>
-							<td>${idx.title }</td>
-							<td>${idx.writer }</td>
+							<td>${idx.name }</td>
+							<td>${idx.isnew}</td>
 							<td>
-								<fmt:parseDate value="${idx.regdate }" var="reg" pattern="yyyy-MM-dd"/>
-								<fmt:formatDate value="${reg }" pattern="yyyy-MM-dd" />
+								<c:set var="totalCareer" value="0"/>
+								<c:forEach items="${career }" var="car" varStatus="status">
+									<c:if test="${idx.no eq car.member_no }">
+										<c:if test="${car.totalCareer > 12 }">
+											<c:set var="totalCareer" value="${totalCareer + car.totalCareer }"/>
+										</c:if>	
+										<c:if test="${car.totalCareer < 12 }">
+											<c:set var="totalCareer" value="${totalCareer + car.totalCareer }"/>
+										</c:if>
+									</c:if>
+								</c:forEach>
+								<c:if test="${totalCareer > 0 }">
+									<c:if test="${totalCareer > 12}">
+									<fmt:formatNumber value="${totalCareer/12 }" pattern="0"/>년
+									<fmt:formatNumber value="${totalCareer%12 }" pattern="0"/>개월
+									</c:if>
+									<c:if test="${totalCareer < 12 }">
+										<fmt:formatNumber value="${totalCareer }" pattern="0"/>개월
+									</c:if>
+								</c:if>
 							</td>
+							<td>
+								${idx.projecthistory }
+							</td>
+							<td>${idx.rank }</td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
-		</div> --%>
+		</div>
 		<div class="col-md-4 borderBox">
-			<label>Project Woring</label>
-			<label style="float: right"><a href="${pageContext.request.contextPath }/jsp/project_working/list.jsp">more</a></label>
+			<label>Project Join</label>
+			<label style="float: right"><a href="${pageContext.request.contextPath }/projectjoin/list.do?page=1&perPageNum=10&location=projectjoin">more</a></label>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -105,47 +83,21 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>Gild Dong, Hong</td>
-						<td>Project No.1</td>
-						<td>Dev.</td>
-						<td>2017-05-03</td>
-						<td>2017-05-08</td>
-					</tr>
-					<tr>
-						<td>Gild Dong, Hong</td>
-						<td>Project No.1</td>
-						<td>Dev.</td>
-						<td>2017-05-03</td>
-						<td>2017-05-08</td>
-					</tr>
-					<tr>
-						<td>Gild Dong, Hong</td>
-						<td>Project No.1</td>
-						<td>Dev.</td>
-						<td>2017-05-03</td>
-						<td>2017-05-08</td>
-					</tr>
-					<tr>
-						<td>Gild Dong, Hong</td>
-						<td>Project No.1</td>
-						<td>Dev.</td>
-						<td>2017-05-03</td>
-						<td>2017-05-08</td>
-					</tr>
-					<tr>
-						<td>Gild Dong, Hong</td>
-						<td>Project No.1</td>
-						<td>Dev.</td>
-						<td>2017-05-03</td>
-						<td>2017-05-08</td>
-					</tr>
+					<c:forEach items="${projectJoinList }" var="idx">
+						<tr>
+							<td>${idx.member }</td>
+							<td>${idx.name }</td>
+							<td>${idx.position }</td>
+							<td>${idx.join }</td>
+							<td>${idx.out }</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
 		<div class="col-sm-6 borderBox">
 			<label>Project</label>
-			<label style="float: right"><a href="${pageContext.request.contextPath }/project/list.do?page=1&perPageNum=10">more</a></label>
+			<label style="float: right"><a href="${pageContext.request.contextPath }/project/list.do?page=1&perPageNum=10&location=project">more</a></label>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -156,41 +108,12 @@
 					</tr>
 				</thead>
 				<tbody>
-						<tr>
-							<td>Project No.1</td>
-							<td>2017-01-01</td>
-							<td>2018-01-01</td>
-							<td>0</td>
-						</tr>
-						<tr>
-							<td>Project No.1</td>
-							<td>2017-01-01</td>
-							<td>2018-01-01</td>
-							<td>0</td>
-						</tr>
-						<tr>
-							<td>Project No.1</td>
-							<td>2017-01-01</td>
-							<td>2018-01-01</td>
-							<td>0</td>
-						</tr>
-						<tr>
-							<td>Project No.1</td>
-							<td>2017-01-01</td>
-							<td>2018-01-01</td>
-							<td>0</td>
-						</tr>
-						<tr>
-							<td>Project No.1</td>
-							<td>2017-01-01</td>
-							<td>2018-01-01</td>
-							<td>0</td>
-						</tr>
-					<c:forEach items="${project }" var="idx">
+					<c:forEach items="${projectList }" var="idx">
 						<tr>
 							<td>${idx.name }</td>
-							<td>${idx.startday }</td>
-							<td>${idx.inmember }</td>
+							<td>${idx.start }</td>
+							<td>${idx.end }</td>
+							<td align="center">${idx.member_count }</td>
 						</tr>
 					</c:forEach>
 				</tbody>

@@ -377,6 +377,13 @@ function setDatePicketInit(){
 					</tr>
 				</thead>
 				<tbody class="employeeTableList">
+				<c:if test="${empty employee }">
+					<tr>
+						<td colspan="7" align="center">
+							<h4>No Participatant Available</h4>
+						</td>
+					</tr>
+				</c:if>
 					<c:forEach items="${employee }" var="idx" varStatus="status">
 						<tr>
 							<td>

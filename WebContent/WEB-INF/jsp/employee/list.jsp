@@ -65,7 +65,7 @@
 	}
 	
 	$(document).ready(function(){
-		var listUrl="${pageContext.request.contextPath }/member/list.do?page=${cri.page}&perPageNum=${cri.perPageNum}";
+		var listUrl="${pageContext.request.contextPath }/employee/list.do?page=${cri.page}&perPageNum=${cri.perPageNum}";
 		
 		if("${param.isnew}"!=""){
 			$("#search_option").val("${param.isnew}").attr("selected","selected");
@@ -102,14 +102,8 @@
 		});
 		
 		$("#btn_search").on("click", function(){	
-			if($("#search_name").val()!=""){
-				listUrl+="&name="+$("#search_name").val();
-			}
-			if($("#search_name").val()==""){
-				alert("찾으실 이름을 입력해 주십시오.");
-			}else{
-				$(location).attr('href',listUrl);
-			}
+			ilistUrl+="&name="+$("#search_name").val();
+			$(location).attr('href',listUrl);
 		});
 	});
 </script>
@@ -158,7 +152,6 @@
 		<table class="table table-hover" style="width: 100%;">
 			<thead>
 				<tr>
-					<th width="50px">No.</th>
 					<th>Name</th>
 					<th width="50px">Career</th>
 					<th width="50px">Project History</th>
@@ -174,8 +167,7 @@
 			<tbody>
 				<c:forEach items="${list }" var="idx" varStatus="status">
 				<c:set var="skill" value="${fn:split(idx.haveskill, ',') }"/>
-				<tr>				
-					<td>${idx.no}</td>
+				<tr>
 					<td>
 						<a href="${pageContext.request.contextPath }/employee/read.do?page=${cri.page}&perPageNum=${cri.perPageNum}&no=${idx.no}">${idx.name }</a>
 					</td>

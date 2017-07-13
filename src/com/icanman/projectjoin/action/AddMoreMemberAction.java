@@ -1,4 +1,4 @@
-package com.icanman.project.action;
+package com.icanman.projectjoin.action;
 
 import java.util.List;
 
@@ -6,12 +6,13 @@ import com.icanman.employee.model.Employee;
 import com.icanman.employee.service.EmployeeService;
 import com.opensymphony.xwork2.Action;
 
-public class ModifyMemberAction implements Action{
+public class AddMoreMemberAction implements Action{
 	private List<Employee> employeeList;
 	
 	@Override
 	public String execute() throws Exception {
 		EmployeeService employeeService = new EmployeeService();
+		employeeList = employeeService.addMoreEmployee();
 		
 		return "success";
 	}

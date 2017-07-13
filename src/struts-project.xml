@@ -3,6 +3,9 @@
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <package name="project" namespace="/project" extends="struts-default">
+    	<global-results>
+			<result name="error">/WEB-INF/jsp/error/error.jsp</result>
+		</global-results>
     	<action name="list" class="com.icanman.project.action.ProjectListAction" >
     		<interceptor-ref name="params"/>
     		<result name="success">/WEB-INF/jsp/project/list.jsp</result>

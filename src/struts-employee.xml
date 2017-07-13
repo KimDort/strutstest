@@ -3,6 +3,9 @@
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <package name="employee" namespace="/employee" extends="struts-default">
+    	<global-results>
+			<result name="error">/WEB-INF/jsp/error/error.jsp</result>
+		</global-results>
     	<action name="list" class="com.icanman.employee.action.EmployeeListAction">
     		<interceptor-ref name="prepare"/>
     		<interceptor-ref name="modelDriven"/>

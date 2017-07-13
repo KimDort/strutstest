@@ -16,9 +16,16 @@ public class Employee {
 	private String haveskill;
 	private String position;
 	private char isexit='N';
-	private int projecthistory;
+	private String projecthistory;
 	private int rowNum;
+	private String isInProject;
 	
+	public String getIsInProject() {
+		return isInProject;
+	}
+	public void setIsInProject(String isInProject) {
+		this.isInProject = isInProject;
+	}
 	public int getRowNum() {
 		return rowNum;
 	}
@@ -115,11 +122,10 @@ public class Employee {
 	public void setIsexit(char isexit) {
 		this.isexit = isexit;
 	}
-	public int getProjecthistory() {
+	public String getProjecthistory() {
 		return projecthistory;
 	}
-	public void setProjecthistory(int projecthistory) {
+	public void setProjecthistory(String projecthistory) {
 		this.projecthistory = projecthistory;
 	}
-	
 }

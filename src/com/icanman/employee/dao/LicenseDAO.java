@@ -13,8 +13,12 @@ public class LicenseDAO {
 	public int register(Connection conn, List<License> list)throws Exception{
 		int success=0;
 		PreparedStatement pstmt=null;
-		String sql="INSERT INTO LICENSE VALUES((SELECT NVL(MAX(LICENSE_NO),0)+1 FROM LICENSE),"
-				+ "(EMPLOYEESEQ.CURRVAL), ?, ?, ?, ?)";
+		String sql="INSERT INTO LICENSE"
+				+ "		(LICENSE_NO, MEMBER_NO, LICENSE_NAME, LICENSE_LEVEL, LICENSE_GETDATE, LICENSE_PUBLISHER)"
+				+ "	 VALUES("
+				+ "			(SELECT NVL(MAX(LICENSE_NO),0)+1 FROM LICENSE),"
+				+ "			(SELECT NVL(MAX(MEMBER_NO,0)+1 FROM EMPLOYEE), ?, ?, ?, ?"
+				+ "			)";
 		try {
 			pstmt=conn.prepareStatement(sql);
 			int pstmtCount=1;
