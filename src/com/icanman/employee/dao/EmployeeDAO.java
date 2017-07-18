@@ -12,6 +12,30 @@ import com.icanman.tools.SearchCriteria;
 
 //Employee DAO Class
 public class EmployeeDAO{
+	public String getMaxSkill(Connection conn)throws Exception{
+		String skills="";
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		String sql="SELECT "
+				+ "			LISTAGG(MEMBER_HAVESKILL, ',') WITHIN GROUP(ORDER BY MEMBER_HAVESKILL)  AS MEMBER_HAVESKILL "
+				+ "		FROM "
+				+ "			EMPLOYEE";
+		try {
+			pstmt=conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			while(rs.next()){
+				skills=rs.getString("MEMBER_HAVESKILL");
+			}
+		}  catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(rs!=null){try {rs.close();} catch (Exception e2) {}}
+			if(pstmt!=null){try {pstmt.close();} catch (Exception e2) {}}
+		}
+		
+		return skills;
+	}
 	public List<Employee> addMoreEmployee(Connection conn)throws Exception{
 		List<Employee> list = new ArrayList<>();
 		PreparedStatement pstmt=null;
@@ -186,7 +210,9 @@ public class EmployeeDAO{
 					+ "					MEMBER_NO, MEMBER_NAME, MEMBER_COMPANY, MEMBER_IDNUMBER, MEMBER_ZIPCODE, MEMBER_ADDRESS, MEMBER_ADDRESS_DETAIL,"
 					+ "					MEMBER_RANK, MEMBER_JOIN, MEMBER_OUT, MEMBER_ISNEW, MEMBER_HAVESKILL, MEMBER_ISEXIT, MEMBER_POSITION"
 					+ "				) "
-					+ "		VALUES(SELECT NVL(MAX(MEMBER_NO),0)+1 FROM EMPLOYEE), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "		VALUES("
+					+ "				(SELECT NVL(MAX(MEMBER_NO),0)+1 FROM EMPLOYEE), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?"
+					+ "				)";
 			pstmt=conn.prepareStatement(sql);
 			int idx=1;
 			pstmt.setString(idx++, vo.getName());

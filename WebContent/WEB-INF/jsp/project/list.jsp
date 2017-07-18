@@ -70,28 +70,37 @@
 		}
 	}
 	$(document).ready(function(){
-		$("#searchProject").on("change", function(){
-			if($("#searchProject option:selected").val()=="searcgDate"){
-				var str="<div class='form-inline'>"
-						+"<input type='text' name='startDay' class='form-control' style='width:45%'>"
-						+"~<input type='text' name='endDay' class='form-control' style='width:45%'></div>";
-				$("#searchProjectBox").html(str);
-				$("input[name='startDay']").datepicker({
-					dateFormat:'yy-mm-dd',
-					changeMonth: true, 
-			        changeYear: true,
-			        nextText: '다음 달',
-			        prevText: '이전 달' 
-				});
-				$("input[name='endDay']").datepicker({
-					dateFormat:'yy-mm-dd',
-					changeMonth: true, 
-			        changeYear: true,
-			        nextText: '다음 달',
-			        prevText: '이전 달' 
-				});
-			}
+		if("${param.startDay}"!=""){
+			$("input[name='startDay']").val("${param.startDay}");
+		}
+		if("${param.endDay}" != ""){
+			$("input[name='endDay']").val("${param.endDay}");
+		}
+		$("input[name='startDay").datepicker({
+			dateFormat:'yy-mm-dd',
+			changeMonth: true, 
+	        changeYear: true,
+	        nextText: '다음 달',
+	        prevText: '이전 달' 
 		});
+		$("input[name='endDay']").datepicker({
+			dateFormat:'yy-mm-dd',
+			changeMonth: true, 
+	        changeYear: true,
+	        nextText: '다음 달',
+	        prevText: '이전 달' 
+		});
+	});
+	var searchUrl="${pageContext.request.contextPath }/project/list.do?"
+		+"page=${cri.page}&perPageNum=${cri.perPageNum}&location=project";
+	$(document).on("click","#searchProject", function(){
+		if(($("input[name='startDay").val() != "" && $("input[name='endDay']").val() =="") || 
+				($("input[name='startDay").val() == "" && $("input[name='endDay']").val() !="")){
+			alert("조회 일자를 제대로 입력해 주십시오.");
+		}else{
+			searchUrl+="&startDay="+$("input[name='startDay']").val()+"&endDay="+$("input[name='endDay']").val();
+			$(location).attr("href", searchUrl);
+		}
 	});
 </script>
 <title>Insert title here</title>
@@ -126,14 +135,15 @@
 						<select class="form-control" id="searchProject">
 							<option value="searchName">Name</option>
 							<option value="searchCompany">Company</option>
-							<option value="searcgDate">Date</option>
 						</select>
 					</td>
+					<td width="150px"><input type="text" class="form-control" name="startDay" readonly="readonly"></td>
+					<td width="150px"><input type="text" class="form-control" name="endDay" readonly="readonly"></td>
 					<td id="searchProjectBox">
 						<input type="text" class="form-control">
 					</td>
 					<td width="100px">
-						<input type="button" class="form-control" value="Search">
+						<input type="button" class="form-control" value="Search" id="searchProject">
 					</td>
 				</tr>
 			</tbody>

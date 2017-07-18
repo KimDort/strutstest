@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import com.icanman.employee.dao.CareerDAO;
@@ -18,7 +20,27 @@ import com.icanman.tools.DBConn;
 import com.icanman.tools.SearchCriteria;
 //Employee Service Class
 public class EmployeeService{
-	
+	public List<String> getMaxSkill()throws Exception{
+		DBConn dbConn=new DBConn();
+		List<String> list=new ArrayList<>();
+		EmployeeDAO dao=new EmployeeDAO();
+		Connection conn =null;
+		try {
+			conn=dbConn.getConnection();
+			String[] skill=dao.getMaxSkill(conn).trim().split(",");
+			skill = new HashSet<String>(Arrays.asList(skill)).toArray(new String[0]);
+			for(int idx=0;idx<skill.length;idx++){
+				list.add(skill[idx]);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}finally {
+			if(conn!=null){try {conn.close();} catch (Exception e2) {}}
+		}
+		
+		return list;
+	}
 	public List<Career> readCareerProjectJoin(int projectNum)throws Exception{
 		DBConn dbConn=new DBConn();
 		List<Career> list=new ArrayList<>();

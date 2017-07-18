@@ -15,7 +15,14 @@ public class ProjectDAO {
 	public int register(Connection conn, Project vo)throws SQLException{
 		int success=0;
 		PreparedStatement pstmt=null;
-		String sql="INSERT INTO PROJECT VALUES(PROJECTSEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql="INSERT INTO "
+				+ "				PROJECT("
+				+ "						PROJECT_NO, PROJECT_NAME, PROJECT_CONTENT, "
+				+ "						PROJECT_START, PROJECT_END, PROJECT_ORDER_COMPANY, PROJECT_CREATE_SKILL, PROJECT_ETC, "
+				+ "						PROJECT_ISDELETE) "
+				+ "			VALUES("
+				+ "					(SELECT NVL(MAX(PROJECT_NO),0)+1 FROM PROJECT), ?, ?, ?, ?, ?, ?, ?, ?"
+				+ "					)";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -58,21 +65,31 @@ public class ProjectDAO {
 				+ "				PROJECT "
 				+ "				ORDER BY PROJECT_NO DESC)"
 				+ "		)"
-				+"	WHERE "
-				+ "		PROJECT_NO > 0 "
-				+ "	AND PROJECT_ISDELETE != 'Y' "
-				+ "	AND R >=? AND R <= ? "
+				+"	WHERE R >=? AND R <= ? "
 				+ "	AND PROJECT_ISDELETE='N'"
-				+ "	AND PROJECT_START <= ? "
-				+ "	AND PROJECT_END >= ?";
+				+ "	AND PROJECT_NAME LIKE '%' || ? || '%'"
+				+ "	AND PROJECT_START >= "
+				+ "		CASE "
+				+ "			WHEN ? IS NULL "
+				+ "				THEN TO_CHAR(PROJECT_START, 'YYYY-MM-DD') "
+				+ "					ELSE TO_CHAR(TO_DATE(?),'YYYY-MM-DD') "
+				+ "		END"
+				+"	AND PROJECT_END <= "
+				+ "		CASE "
+				+ "			WHEN ? IS NULL "
+				+ "				THEN TO_CHAR(PROJECT_END, 'YYYY-MM-DD') "
+				+ "					ELSE TO_CHAR(TO_DATE(?), 'YYYY-MM-DD') "
+				+ "		END";
 		try {
 			pstmt=conn.prepareStatement(sql);
 			int idx=1;
 			pstmt.setInt(idx++, cri.getPageStart());
 			pstmt.setInt(idx++, cri.getPageEnd());
+			pstmt.setString(idx++, cri.getName());
+			pstmt.setString(idx++, cri.getStartDay());
 			pstmt.setString(idx++, cri.getStartDay());
 			pstmt.setString(idx++, cri.getEndDay());
-			
+			pstmt.setString(idx++, cri.getEndDay());
 			rs=pstmt.executeQuery();
 			
 			while(rs.next()){

@@ -77,7 +77,9 @@
 		}else{
 			$("#search_name").val("");
 		}
-		
+		if("${param.haveskill}"!=""){
+			$("#skill_search").val("${param.haveskill}").attr("selected", "selected");
+		}
 		$("#search_option").on("change",function(){	
 			if($("#search_name").val()!=""){
 				listUrl+="&name="+$("#search_name").val();
@@ -92,6 +94,9 @@
 				$(location).attr('href',listUrl+"&isnew=Career");	
 			}			
 		});
+		$("#skill_search").on("change", function(){
+			listUrl+="&haveskill="+$("#skill_search").val();
+		});
 		
 		$("#search_option_detail").on("change", function(){
 			if($("#search_option_detail").val()=="All"){
@@ -102,7 +107,7 @@
 		});
 		
 		$("#btn_search").on("click", function(){	
-			ilistUrl+="&name="+$("#search_name").val();
+			listUrl+="&name="+$("#search_name").val();
 			$(location).attr('href',listUrl);
 		});
 	});
@@ -143,6 +148,14 @@
 							<option value="Career">Career</option>
 						</select>
 					</td>
+					<td width="100px">
+						<select class="form-control" name="skill_search" id="skill_search">
+							<option value=""></option>
+							<c:forEach items="${searchSkill }" var="idx">
+								<option value="${idx }">${idx }</option>
+							</c:forEach>
+						</select>
+					</td>
 					<td>
 						<input type="button" class="btn btn-default" value="Search" id="btn_search">
 					</td>	
@@ -165,6 +178,13 @@
 				</tr>
 			</thead>
 			<tbody>
+				<c:if test="${empty list }">
+					<tr>
+						<td colspan="10" align="center">
+							This Board List Empty
+						</td>
+					</tr>
+				</c:if>
 				<c:forEach items="${list }" var="idx" varStatus="status">
 				<c:set var="skill" value="${fn:split(idx.haveskill, ',') }"/>
 				<tr>

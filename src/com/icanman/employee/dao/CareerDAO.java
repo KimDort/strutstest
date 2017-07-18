@@ -57,20 +57,24 @@ public class CareerDAO {
 		PreparedStatement pstmt = null;
 		try {
 			String sql = "INSERT INTO "
-					+ "		CAREER("
-					+ "				CAREER_NO, MEMBER_NO, CAREER_PERIOD_START, CAREER_PERIOD_END, CAREER_COMPANY, CAREER_RANK, CAREER_POSITION"
-					+ "				)"
-					+ "			 VALUES("
-					+ "				(SELECT NVL(MAX(CAREER_NO),0)+1 FROM CAREER), "
-					+ "				(SELECT NVL(MAX(MEMBER_NO,0)+1 FROM EMPLOYEE), ?, ?, ?, ?, ?)";
+					+ "				CAREER("
+					+ "						CAREER_NO, MEMBER_NO, CAREER_PERIOD_START, CAREER_PERIOD_END, "
+					+ "						CAREER_COMPANY, CAREER_RANK, CAREER_POSITION"
+					+ "						) "
+					+ "					 VALUES("
+					+ "							(SELECT NVL(MAX(CAREER_NO),0)+1 AS CAREER_NO FROM CAREER), "
+					+ "							(SELECT MAX(MEMBER_NO) AS MEMBER_NO FROM EMPLOYEE), ?, ?, ?, ?, ?"
+					+ "							)";
 			pstmt = conn.prepareStatement(sql);
+			int idxCount=1;
 			for (int idx = 0; idx < list.size(); idx++) {
-				pstmt.setString(1, list.get(idx).getPeriod_start());
-				pstmt.setString(2, list.get(idx).getPeriod_end());
-				pstmt.setString(3, list.get(idx).getPeriod_company());
-				pstmt.setString(4, list.get(idx).getPeriod_rank());
-				pstmt.setString(5, list.get(idx).getPeriod_position());
+				pstmt.setString(idxCount++, list.get(idx).getPeriod_start());
+				pstmt.setString(idxCount++, list.get(idx).getPeriod_end());
+				pstmt.setString(idxCount++, list.get(idx).getPeriod_company());
+				pstmt.setString(idxCount++, list.get(idx).getPeriod_rank());
+				pstmt.setString(idxCount++, list.get(idx).getPeriod_position());
 				success = pstmt.executeUpdate();
+				idxCount=1;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

@@ -18,6 +18,7 @@ public class EmployeeListAction implements Action, Preparable, ModelDriven{
 	//Employee Info Heap List 
 	private List<Employee> list;
 	private List<Career> career;
+	private List<String> searchSkill;
 	
 	private int page;
 	private int perPageNum;
@@ -28,6 +29,7 @@ public class EmployeeListAction implements Action, Preparable, ModelDriven{
 		EmployeeService employeeService = new EmployeeService();
 		list=employeeService.list(cri);
 		career=employeeService.careerList();
+		searchSkill=employeeService.getMaxSkill();
 		return "success";
 	}
 
@@ -44,6 +46,16 @@ public class EmployeeListAction implements Action, Preparable, ModelDriven{
 	}
 	
 	
+	public List<String> getSearchSkill() {
+		return searchSkill;
+	}
+
+
+	public void setSearchSkill(List<String> searchSkill) {
+		this.searchSkill = searchSkill;
+	}
+
+
 	public List<Career> getCareer() {
 		return career;
 	}
